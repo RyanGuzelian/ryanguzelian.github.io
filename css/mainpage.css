@@ -1,0 +1,55 @@
+body{
+    background-color: #DEF2F1;
+    overflow: hidden;
+}
+
+nav{
+    background-color: #2B7A78;
+}
+
+#aboutMe{
+    color: #17252A;
+    position:relative;
+    top:10vh;
+    left: 10vw;
+    
+}
+
+#occupationContainer{
+	display: inline-block;
+}
+
+.name{
+    font-size: 5vw;
+  font-weight: 700;
+}
+
+.typed {
+    display: inline-block;
+    overflow: hidden;
+    letter-spacing: 0.15vw;
+   animation: typing 2s steps(18, end), blink .5s step-end infinite;
+  white-space: nowrap;
+  font-size: 5vw;
+  font-weight: 900;
+  border-right: 4px solid #2B7A78;
+  box-sizing: border-box;
+}
+
+@keyframes typing {
+    from { 
+        width: 0% 
+    }
+    to { 
+        width: 100% 
+    }
+}
+
+@keyframes blink {
+    from, to { 
+        border-color: transparent 
+    }
+    50% { 
+        border-color: #2B7A78; 
+    }
+}
