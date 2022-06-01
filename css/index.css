@@ -53,3 +53,20 @@ nav{
         border-color: #2B7A78; 
     }
 }
+
+#title{
+    position:relative;
+    top:5vh;
+    font-size: 5vh;
+    font-weight: 900;
+    text-align:center;
+}
+
+#normaltext{
+    position: relative;
+    top: 8vh;
+    left: 2vw;
+    margin-right: 2vw;
+    font-size: 3vh;
+    font-weight: 600;
+}
