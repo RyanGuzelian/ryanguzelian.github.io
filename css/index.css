@@ -1,6 +1,5 @@
 body{
     background-color: #DEF2F1;
-    overflow: hidden;
 }
 
 nav{
@@ -12,7 +11,7 @@ nav{
     position:relative;
     top:10vh;
     left: 10vw;
-    
+    width:fit-content;
 }
 
 #occupationContainer{
@@ -20,7 +19,7 @@ nav{
 }
 
 .name{
-    font-size: 5vw;
+  font-size: 5vw;
   font-weight: 700;
 }
 
@@ -28,7 +27,7 @@ nav{
     display: inline-block;
     overflow: hidden;
     letter-spacing: 0.15vw;
-   animation: typing 2s steps(18, end), blink .5s step-end infinite;
+   animation: typing 1s steps(16, end), blink .5s step-end infinite;
   white-space: nowrap;
   font-size: 5vw;
   font-weight: 900;
@@ -69,4 +68,18 @@ nav{
     margin-right: 2vw;
     font-size: 3vh;
     font-weight: 600;
+}
+
+
+#logoHolder{
+    position:relative;
+    justify-content: center;
+    top:40vh;
+    left: 38vw;
+    width: fit-content;
+}
+
+#linkedinLogo, #githubLogo{
+    margin-left:4vw;
+    text-decoration: none;
 }
