@@ -1,23 +1,31 @@
+import React, { useState } from "react";
 import Home from "./pages/Home";
 import "./App.css";
 import Navigation from "./components/Navigation";
 import GlobalStyles from "./components/GlobalStyles";
 import "bootstrap/dist/css/bootstrap.css";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Projects from "./pages/Projects";
 
 function App() {
+  const [currentPage, setCurrentPage] = useState("home");
+
+  const changePage = (page) => {
+    setCurrentPage(page);
+  };
+
+  const renderPage = () => {
+    if (currentPage === "home") {
+      return <Home />;
+    } else if (currentPage === "projects") {
+      return <Projects />;
+    }
+  };
+
   return (
     <div>
       <GlobalStyles />
-      <Navigation />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Navigate to="/home" />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/projects" element={<Projects />}/>
-        </Routes>
-      </BrowserRouter>
+      <Navigation changePage={changePage} />
+      {renderPage()}
     </div>
   );
 }
