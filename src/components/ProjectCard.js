@@ -52,8 +52,9 @@ function ProjectCard(props) {
                 color: "white",
                 border: "none",
                 padding: "1% 2%",
-                borderRadius: "1%",
+                borderRadius: "15px",
                 cursor: "default",
+                padding: "5px 20px 6px 20px"
               }}
             >
               {tagText}
