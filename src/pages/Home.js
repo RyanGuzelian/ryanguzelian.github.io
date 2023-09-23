@@ -72,15 +72,6 @@ function Home() {
         <PresentationHolder>
           <Presentation />
         </PresentationHolder>
-        <Footer>
-          {" "}
-          Illustration by{" "}
-          <FooterLink href="https://icons8.com/illustrations/author/TQQ1qAnr9rn5">
-            Oleg Shcherba
-          </FooterLink>{" "}
-          from{" "}
-          <FooterLink href="https://icons8.com/illustrations">Ouch!</FooterLink>
-        </Footer>
       </HomeContainer>
     </>
   );
