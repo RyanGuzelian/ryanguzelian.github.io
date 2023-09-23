@@ -39,20 +39,6 @@ const PresentationHolder = styled.div`
   }
 `;
 
-const Footer = styled.div`
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  text-align: center;
-  padding: 10px 0;
-  color: #999999;
-`;
-
-const FooterLink = styled.a`
-  color: #999999;
-`;
-
 function Home() {
   useEffect(() => {
     // Set overflow: hidden when Home component mounts
