@@ -140,6 +140,7 @@ const Contact = () => {
   
   const [validated, setValidated] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [error, setError] = useState(false);
   
   const handleChange = (e) => {

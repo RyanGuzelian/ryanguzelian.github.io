@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import Typewriter from "typewriter-effect";
 import Gif from "../images/ProgrammingGif.gif";
+// eslint-disable-next-line no-unused-vars
 import { Link } from "react-router-dom";
 
 const HeroSection = styled.section`
