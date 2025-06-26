@@ -1,91 +1,252 @@
-import React from "react";
-import ProjectCard from "../components/ProjectCard";
-import Asteroids from "../images/asteroids.jpg";
-import Maalem from "../images/maalem.jpg";
-import Organik from "../images/organik.jpg";
-import Hired from "../images/hired.jpg";
-import Collatz from "../images/collatz.jpg";
-import Blackout from "../images/Blackout.gif";
+import React, { useState, useEffect } from "react";
+import { Container, Row, Col, Nav, Form, InputGroup } from "react-bootstrap";
 import styled from "styled-components";
+import ProjectCard from "../components/ProjectCard";
+import ProjectDetail from "../components/ProjectDetail";
+import projectsData from "../data/projects";
 
-const ProjectsContainer = styled.div`
-  max-width: 90%;
-  margin: 0 auto;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 2em;
-  margin-top: 2em;
-  margin-bottom: 2em;
-  overflow: auto;
+const ProjectsSection = styled.section`
+  padding: 60px 0;
 `;
 
-const ProjectCardWithMargin = styled(ProjectCard)`
-  width: calc(50% - 1em);
-  max-width: calc(50% - 1em);
+const SectionTitle = styled.h2`
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 50px;
+  color: var(--primary-color);
+  
+  &:after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 4px;
+    margin: 15px auto 0;
+    background-color: var(--secondary-color);
+  }
 `;
 
+const FiltersContainer = styled.div`
+  background-color: var(--white);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 20px;
+  margin-bottom: 30px;
+`;
+
+const FilterNav = styled(Nav)`
+  .nav-link {
+    color: var(--text-color);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 500;
+    margin-right: 10px;
+    
+    &.active {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    &:hover:not(.active) {
+      background-color: var(--light-gray);
+    }
+  }
+`;
+
+const SearchInput = styled(InputGroup)`
+  max-width: 300px;
+
+  .form-control {
+    border-radius: 20px 0 0 20px;
+    border: 1px solid var(--light-gray);
+    padding: 0.5rem 1rem;
+    
+    &:focus {
+      box-shadow: none;
+      border-color: var(--primary-color);
+    }
+  }
+  
+  .input-group-text {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+    border-radius: 0 20px 20px 0;
+  }
+`;
+
+const CardGrid = styled(Row)`
+  margin-bottom: 30px;
+`;
+
+/**
+ * Projects Component
+ * 
+ * Displays a list of projects with filtering options
+ * and detailed view functionality
+ */
 function Projects() {
+  const [filter, setFilter] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [filteredProjects, setFilteredProjects] = useState(projectsData);
+  
+  // Apply filters whenever filter or search term changes
+  useEffect(() => {
+    let results = projectsData;
+    
+    // Apply status filter
+    if (filter === "in-progress") {
+      results = results.filter(project => project.status === "in-progress");
+    } else if (filter === "completed") {
+      results = results.filter(project => project.status === "completed");
+    } else if (filter === "featured") {
+      results = results.filter(project => project.featured);
+    }
+    
+    // Apply search filter if there's a search term
+    if (searchTerm.trim() !== "") {
+      const term = searchTerm.toLowerCase();
+      results = results.filter(project => 
+        project.title.toLowerCase().includes(term) || 
+        project.shortDescription.toLowerCase().includes(term) ||
+        project.tags.some(tag => tag.toLowerCase().includes(term))
+      );
+    }
+    
+    setFilteredProjects(results);
+  }, [filter, searchTerm]);
+  
+  // Handle viewing project details
+  const handleViewDetails = (projectId) => {
+    const project = projectsData.find(proj => proj.id === projectId);
+    setSelectedProject(project);
+    window.scrollTo(0, 0);
+  };
+  
+  // Handle going back to project list
+  const handleBack = () => {
+    setSelectedProject(null);
+    window.scrollTo(0, 0);
+  };
+  
+  // Separate featured projects
+  const featuredProjects = projectsData.filter(project => project.featured);
+  
   return (
-    <ProjectsContainer>
-      <ProjectCardWithMargin
-        image={Collatz}
-        title="Collatz Conjecture Solution"
-        text={
+    <ProjectsSection>
+      <Container>
+        <SectionTitle>My Projects</SectionTitle>
+        
+        {/* If a project is selected, show its details */}
+        {selectedProject ? (
+          <ProjectDetail project={selectedProject} onBack={handleBack} />
+        ) : (
           <>
-            While being more of an analysis/research type of project, I am
-            attempting to solve the{" "}
-            <a
-              href="https://en.wikipedia.org/wiki/Collatz_conjecture"
-              style={{ color: "white", textDecoration: "underline" }}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Collatz Conjecture
-            </a>{" "}
-            by using algorithms to find patterns that appear in the recursion
-            process. This has allowed me to deepen my understanding of pattern recognition methods.
+            {/* Filter and search controls */}
+            <FiltersContainer>
+              <Row className="align-items-center">
+                <Col md={7} className="mb-3 mb-md-0">
+                  <FilterNav variant="pills">
+                    <Nav.Item>
+                      <Nav.Link 
+                        active={filter === "all"}
+                        onClick={() => setFilter("all")}
+                      >
+                        All
+                      </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                      <Nav.Link 
+                        active={filter === "featured"}
+                        onClick={() => setFilter("featured")}
+                      >
+                        Featured
+                      </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                      <Nav.Link 
+                        active={filter === "in-progress"}
+                        onClick={() => setFilter("in-progress")}
+                      >
+                        In Progress
+                      </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                      <Nav.Link 
+                        active={filter === "completed"}
+                        onClick={() => setFilter("completed")}
+                      >
+                        Completed
+                      </Nav.Link>
+                    </Nav.Item>
+                  </FilterNav>
+                </Col>
+                <Col md={5}>
+                  <SearchInput>
+                    <Form.Control 
+                      placeholder="Search projects..." 
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                    <InputGroup.Text>
+                      <i className="fas fa-search"></i>
+                    </InputGroup.Text>
+                  </SearchInput>
+                </Col>
+              </Row>
+            </FiltersContainer>
+            
+            {/* Featured Projects Section (Only shown when filter is "all" or "featured") */}
+            {(filter === "all" || filter === "featured") && featuredProjects.length > 0 && (
+              <>
+                <h3 className="mb-4">Featured Projects</h3>
+                <CardGrid>
+                  {featuredProjects.map((project) => (
+                    <Col lg={6} md={12} className="mb-4" key={project.id}>
+                      <ProjectCard 
+                        project={project} 
+                        onViewDetails={handleViewDetails} 
+                        featured={true} 
+                      />
+                    </Col>
+                  ))}
+                </CardGrid>
+              </>
+            )}
+            
+            {/* All Projects Section */}
+            {filter !== "featured" && (
+              <>
+                <h3 className="mb-4">
+                  {filter === "all" ? "All Projects" : 
+                   filter === "in-progress" ? "In Progress Projects" : 
+                   "Completed Projects"}
+                </h3>
+                <CardGrid>
+                  {filteredProjects.map((project) => (
+                    <Col lg={4} md={6} className="mb-4" key={project.id}>
+                      <ProjectCard 
+                        project={project} 
+                        onViewDetails={handleViewDetails} 
+                      />
+                    </Col>
+                  ))}
+                </CardGrid>
+                
+                {/* Show message when no projects match the filters */}
+                {filteredProjects.length === 0 && (
+                  <div className="text-center py-5">
+                    <h4>No projects found matching your criteria.</h4>
+                    <p>Try adjusting your filters or search terms.</p>
+                  </div>
+                )}
+              </>
+            )}
           </>
-        }
-        isInProgress={true}
-        tags={['In Progress','Data Analysis', 'Pattern Recognition', 'Algorithms']}
-      />
-      <ProjectCardWithMargin
-        image={Blackout}
-        title="Blackout Launcher"
-        text="This android launcher aims to reduce people's addiction to smartphones by stripping away dopamine-inducing parts of the UI, while still providing a solid user experience."
-        isInProgress={true}
-        tags={['In Progress','Design Stage']}
-      />
-      <ProjectCardWithMargin
-        image={Hired}
-        title="Hired"
-        text="This platform allows job seekers and employers to connect with each other, creating a seamless experience for all users. It utilizes React.JS, Express.JS, Node.JS, as well as MongoDB for the database. Not only was the work completed on this project full stack, it allowed me to act as a scrum master, where I learned how to further act as a leader."
-        isInProgress={false}
-        tags={['Done','React.JS', 'Express.JS', 'MongoDB']}
-      />
-      <ProjectCardWithMargin
-        image={Maalem}
-        title="Maalem"
-        text="This peer-to-peer student help web app was made using React.JS, Node.JS, while utilizing the benefits of Docker, as well as the power of websockets for a custom messaging system that was reliant on the Google sign-In API."
-        isInProgress={false}
-        tags={['Done','React.JS', 'Node.JS', 'Docker', 'WebSockets']}
-      />
-      <ProjectCardWithMargin
-        image={Asteroids}
-        title="Asteroids"
-        text="This recreation of the retro asteroids game was an introduction to game development that was done in Java, with the Slick2D library. While the library itself is outdated, it allowed for a deeper understanding of OOP concepts as well as the render/display cycle encountered in gaming environments, and how to control it."
-        isInProgress={false}
-        tags={['Done','Java','OOP','Slick2D']}
-      />
-      <ProjectCardWithMargin
-        image={Organik}
-        title="Organik"
-        text="This grocery store webpage was made using basic web development technologies, such as JavaScript, PHP, HTML, and CSS. While not necessarily a 'stack', it allowed for a deeper understanding of web development methodologies, as well as a solid foundation of UI design."
-        isInProgress={false}
-        tags={['Done','JavaScript', 'PHP', 'UI Design']}
-      />
-    </ProjectsContainer>
+        )}
+      </Container>
+    </ProjectsSection>
   );
 }
 
