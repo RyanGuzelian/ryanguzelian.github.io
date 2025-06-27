@@ -8,9 +8,19 @@ const DetailContainer = styled(Container)`
 
 const ProjectImage = styled.img`
   width: 100%;
-  height: auto;
+  height: 400px;
+  object-fit: cover;
+  object-position: center;
   border-radius: var(--border-radius);
   box-shadow: var(--box-shadow);
+  
+  @media (max-width: 768px) {
+    height: 250px;
+  }
+  
+  @media (max-width: 576px) {
+    height: 200px;
+  }
 `;
 
 const ProjectTitle = styled.h1`
@@ -48,8 +58,8 @@ const TagsContainer = styled.div`
 
 const StyledBadge = styled(Badge)`
   && {
-    background-color: var(--light-bg);
-    color: var(--primary-color);
+    background-color: var(--light-bg) !important;
+    color: var(--primary-color) !important;
     font-weight: 500;
     padding: 8px 16px;
     border-radius: 20px;
@@ -63,6 +73,20 @@ const StyledBadge = styled(Badge)`
     opacity: ${props => props.status === 'in-progress' ? '0.85' : '0.7'};
     border: none;
   }
+
+  &.in-progress {
+      background-color: var(--primary-color) !important;
+      color: white !important;
+      opacity: 0.85;
+      border: none;
+    }
+    
+    &.completed {
+      background-color: var(--primary-color) !important;
+      color: white !important;
+      opacity: 0.7;
+      border: none;
+    }
 `;
 
 const ButtonContainer = styled.div`
@@ -148,7 +172,7 @@ function ProjectDetail({ project, onBack }) {
           <ProjectTitle>{title}</ProjectTitle>
             <TagsContainer>
             <StyledBadge 
-              className="status"
+              className={status === "in-progress" ? "in-progress" : "completed"}
               status={status}
             >
               {status === "in-progress" ? "In Progress" : "Completed"}

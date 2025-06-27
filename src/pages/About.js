@@ -1,5 +1,4 @@
-import React from "react";
-import { Container, Row, Col, ProgressBar } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 import styled from "styled-components";
 
 const AboutSection = styled.section`
@@ -45,22 +44,112 @@ const AboutText = styled.p`
 `;
 
 const SkillsContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
   margin-bottom: 30px;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
 `;
 
-const SkillName = styled.div`
+const SkillCard = styled.div`
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
+  align-items: center;
+  padding: 20px;
+  background-color: var(--white);
+  border: 1px solid var(--light-gray);
+  border-radius: var(--border-radius);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--box-shadow);
+    border-color: var(--primary-color);
+  }
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    text-align: center;
+    padding: 25px 15px;
+  }
+`;
+
+const SkillIconWrapper = styled.div`
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--light-bg);
+  color: var(--primary-color);
+  border-radius: 50%;
+  margin-right: 20px;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  font-weight: bold;
+  
+  @media (max-width: 768px) {
+    margin-right: 0;
+    margin-bottom: 15px;
+  }
+`;
+
+const SkillDetails = styled.div`
+  flex: 1;
+  text-align: left;
+  
+  @media (max-width: 768px) {
+    text-align: center;
+  }
+`;
+
+const SkillName = styled.h5`
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin: 0 0 8px 0;
+`;
+
+const SkillPercentage = styled.p`
+  margin: 0 0 10px 0;
+  color: var(--text-color);
+  font-size: 1rem;
   font-weight: 500;
 `;
 
-const StyledProgressBar = styled(ProgressBar)`
-  height: 10px;
-  margin-bottom: 20px;
+const SkillBarContainer = styled.div`
+  position: relative;
+  height: 8px;
+  background-color: #e9ecef;
+  border-radius: 20px;
+  overflow: hidden;
+`;
+
+const SkillBar = styled.div`
+  height: 100%;
+  width: ${props => props.percent}%;
+  background-color: var(--primary-color);
+  border-radius: 20px;
+  position: relative;
+  transition: width 1.5s ease-in-out;
   
-  .progress-bar {
-    background-color: var(--secondary-color);
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    animation: shimmer 2s infinite;
+  }
+  
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
   }
 `;
 
@@ -82,7 +171,7 @@ const TimelineContainer = styled.div`
     background-color: var(--light-gray);
     
     @media (max-width: 768px) {
-      left: 30px; /* Moved closer to edge on mobile */
+      left: 25px; /* Moved closer to accommodate wider boxes */
     }
   }
   
@@ -91,7 +180,7 @@ const TimelineContainer = styled.div`
   }
   
   @media (max-width: 768px) {
-    padding: 0 15px 0 50px; /* More balanced padding */
+    padding: 0 10px 0 35px; /* Adjusted padding for wider boxes */
     margin-left: 0;
     width: 100%; /* Use full width on mobile */
   }
@@ -130,9 +219,9 @@ const TimelineContent = styled.div`
   box-shadow: var(--box-shadow);
   
   @media (max-width: 768px) {
-    width: calc(100% - 60px); /* Adjusted for better fit on mobile */
-    margin-left: 60px;
-    padding: 15px;
+    width: calc(100% - 45px); /* Made wider to prevent word cutoff */
+    margin-left: 45px; /* Reduced margin to accommodate wider box */
+    padding: 20px; /* Increased from 15px for better text spacing */
   }    
   &:before {
     content: '';
@@ -147,7 +236,7 @@ const TimelineContent = styled.div`
     ${props => props.position === 'left' ? `
       right: -68px;
       @media (max-width: 768px) {
-        left: -40px;
+        left: -35px; /* Adjusted for new margin */
         right: auto;
         top: 50%; /* Center vertically on mobile */
         transform: translateY(-50%);
@@ -155,7 +244,7 @@ const TimelineContent = styled.div`
     ` : `
       left: -68px;
       @media (max-width: 768px) {
-        left: -40px;
+        left: -35px; /* Adjusted for new margin */
         top: 50%; /* Center vertically on mobile */
         transform: translateY(-50%);
       }
@@ -173,8 +262,8 @@ const TimelineContent = styled.div`
       right: -60px;
       width: 60px; /* Keep consistent width */
       @media (max-width: 768px) {
-        left: -32px;
-        width: 32px;
+        left: -27px; /* Adjusted for new margin */
+        width: 27px; /* Adjusted width */
         right: auto;
         top: 50%; /* Center vertically on mobile */
       }
@@ -182,8 +271,8 @@ const TimelineContent = styled.div`
       left: -60px;
       width: 60px; /* Keep consistent width */
       @media (max-width: 768px) {
-        left: -32px;
-        width: 32px;
+        left: -27px; /* Adjusted for new margin */
+        width: 27px; /* Adjusted width */
         top: 50%; /* Center vertically on mobile */
       }
     `}
@@ -216,7 +305,10 @@ const TimelineYear = styled.div`
       margin-bottom: 10px;
       text-align: left;
       justify-content: flex-start;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
+      white-space: normal;
+      line-height: 1.2;
+      height: auto;
     }
   ` : `
     left: -280px; /* Positioned to prevent overlap with dots */
@@ -230,7 +322,10 @@ const TimelineYear = styled.div`
       margin-bottom: 10px;
       text-align: left;
       justify-content: flex-start;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
+      white-space: normal;
+      line-height: 1.2;
+      height: auto;
     }
   `}
 `;
@@ -242,10 +337,14 @@ const TimelineTitle = styled.h4`
   margin-bottom: 10px;
   color: var(--primary-color);
   clear: both; /* Ensures the title starts on a new line after the date */
+  line-height: 1.3;
+  word-wrap: break-word;
   
   @media (max-width: 768px) {
     margin-top: 5px; /* Less space needed on mobile since date is above */
     font-size: 1.1rem;
+    line-height: 1.4;
+    margin-right: 5px; /* Add small right margin on mobile */
   }
 `;
 
@@ -254,27 +353,49 @@ const TimelineSubtitle = styled.h5`
   font-weight: 500;
   margin-bottom: 15px;
   color: var(--text-color);
+  line-height: 1.3;
+  word-wrap: break-word;
   
   @media (max-width: 768px) {
     font-size: 0.95rem;
     margin-bottom: 10px;
+    margin-right: 5px; /* Add small right margin on mobile */
+  }
+`;
+
+const TimelineDescription = styled.p`
+  line-height: 1.6;
+  margin: 0;
+  word-wrap: break-word;
+  
+  @media (max-width: 768px) {
+    margin-right: 5px; /* Add small right margin on mobile */
+    font-size: 0.9rem;
   }
 `;
 
 const About = () => {
   const skills = [
     { name: "JavaScript", percent: 90 },
-    { name: "React.js", percent: 85 },
-    { name: "Node.js", percent: 80 },
-    { name: "Java", percent: 75 },
-    { name: "MongoDB", percent: 70 },
-    { name: "Docker", percent: 65 },
+    { name: "React.js", percent: 90 },
+    { name: "React Native", percent: 90 },
+    { name: "Node.js", percent: 85 },
+    { name: "Express.js", percent: 85 },
+    { name: "C#", percent: 85 },
+    { name: ".NET", percent: 85 },
+    { name: "Java", percent: 80 },
+    { name: "SQL", percent: 80 },
+    { name: "MongoDB", percent: 80 },
+    { name: "Python", percent: 75 },
+    { name: "C++", percent: 75 },
+    { name: "Docker", percent: 70 },
+    { name: "Bash", percent: 70 },
   ];  const education = [
     {
       year: "2025 - 2026",
       title: "Graduate Certificate in Cybersecurity",
       institution: "McGill University",
-      description: "BoilerPlate",
+      description: "Will attend a graduate certificate program in Cybersecurity to enhance my skills in securing software applications and systems.",
       position: "left"
     },
     {
@@ -354,7 +475,7 @@ const About = () => {
                       <TimelineYear position={item.position}>{item.year}</TimelineYear>
                       <TimelineTitle>{item.title}</TimelineTitle>
                       <TimelineSubtitle>{item.institution}</TimelineSubtitle>
-                      <p>{item.description}</p>
+                      <TimelineDescription>{item.description}</TimelineDescription>
                     </TimelineContent>
                   </TimelineItem>
                 ))}
@@ -374,7 +495,7 @@ const About = () => {
                       <TimelineYear position={item.position}>{item.year}</TimelineYear>
                       <TimelineTitle>{item.title}</TimelineTitle>
                       <TimelineSubtitle>{item.company}</TimelineSubtitle>
-                      <p>{item.description}</p>
+                      <TimelineDescription>{item.description}</TimelineDescription>
                     </TimelineContent>
                   </TimelineItem>
                 ))}
@@ -389,13 +510,18 @@ const About = () => {
               <AboutHeading>Skills</AboutHeading>
               <SkillsContainer>
                 {skills.map((skill, index) => (
-                  <div key={index}>
-                    <SkillName>
-                      <span>{skill.name}</span>
-                      <span>{skill.percent}%</span>
-                    </SkillName>
-                    <StyledProgressBar now={skill.percent} />
-                  </div>
+                  <SkillCard key={index}>
+                    <SkillIconWrapper>
+                      {skill.percent}%
+                    </SkillIconWrapper>
+                    <SkillDetails>
+                      <SkillName>{skill.name}</SkillName>
+                      <SkillPercentage>Proficiency: {skill.percent}%</SkillPercentage>
+                      <SkillBarContainer>
+                        <SkillBar percent={skill.percent} />
+                      </SkillBarContainer>
+                    </SkillDetails>
+                  </SkillCard>
                 ))}
               </SkillsContainer>
             </AboutContent>

@@ -64,7 +64,7 @@ const Footer = ({ changePage }) => {
     <FooterWrapper>
       <Container>
         <Row>
-          <Col md={4} sm={6} className="mb-4">
+          <Col md={5} sm={6} className="mb-4">
             <FooterHeading>Ryan Guzelian</FooterHeading>
             <p>Software Engineering Student passionate about creating elegant solutions to complex problems.</p>
             <SocialLinks>
@@ -79,21 +79,13 @@ const Footer = ({ changePage }) => {
               </a>
             </SocialLinks>
           </Col>
-            <Col md={2} sm={6} className="mb-4">
+            <Col md={3} sm={6} className="mb-4">
             <FooterHeading>Navigation</FooterHeading>
             <FooterLink onClick={() => changePage("home")}>Home</FooterLink>
             <FooterLink onClick={() => changePage("projects")}>Projects</FooterLink>
             <FooterLink onClick={() => changePage("about")}>About</FooterLink>
             <FooterLink onClick={() => changePage("resume")}>Resume</FooterLink>
             <FooterLink onClick={() => changePage("contact")}>Contact</FooterLink>
-          </Col>
-          
-          <Col md={3} sm={6} className="mb-4">
-            <FooterHeading>Technologies</FooterHeading>
-            <FooterLink href="#">React.js</FooterLink>
-            <FooterLink href="#">Node.js</FooterLink>
-            <FooterLink href="#">Java</FooterLink>
-            <FooterLink href="#">MongoDB</FooterLink>
           </Col>
           
           <Col md={3} sm={6} className="mb-4">

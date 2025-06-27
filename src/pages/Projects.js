@@ -197,8 +197,8 @@ function Projects() {
               </Row>
             </FiltersContainer>
             
-            {/* Featured Projects Section (Only shown when filter is "all" or "featured") */}
-            {(filter === "all" || filter === "featured") && featuredProjects.length > 0 && (
+            {/* Featured Projects Section (Only shown when filter is "all" or "featured" AND no search is active) */}
+            {(filter === "all" || filter === "featured") && featuredProjects.length > 0 && searchTerm.trim() === "" && (
               <>
                 <h3 className="mb-4">Featured Projects</h3>
                 <CardGrid>

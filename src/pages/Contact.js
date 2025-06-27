@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
+import React from "react";
+import { Container, Row, Col } from "react-bootstrap";
 import styled from "styled-components";
 
 const ContactSection = styled.section`
@@ -28,7 +28,12 @@ const ContactCard = styled.div`
   border-radius: var(--border-radius);
   box-shadow: var(--box-shadow);
   padding: 40px;
-  height: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  
+  @media (max-width: 768px) {
+    padding: 30px 20px;
+  }
 `;
 
 const ContactHeading = styled.h3`
@@ -36,12 +41,54 @@ const ContactHeading = styled.h3`
   font-weight: 600;
   margin-bottom: 20px;
   color: var(--primary-color);
+  text-align: center;
+`;
+
+const ContactSubtitle = styled.p`
+  font-size: 1.1rem;
+  color: var(--text-color);
+  margin-bottom: 40px;
+  line-height: 1.8;
+  text-align: center;
+  
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    margin-bottom: 30px;
+  }
+`;
+
+const ContactInfoGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  margin-bottom: 40px;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
 `;
 
 const ContactInfo = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
+  padding: 20px;
+  background-color: var(--white);
+  border: 1px solid var(--light-gray);
+  border-radius: var(--border-radius);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--box-shadow);
+    border-color: var(--primary-color);
+  }
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    text-align: center;
+    padding: 25px 15px;
+  }
 `;
 
 const IconWrapper = styled.div`
@@ -55,24 +102,63 @@ const IconWrapper = styled.div`
   border-radius: 50%;
   margin-right: 20px;
   font-size: 1.2rem;
+  flex-shrink: 0;
+  
+  @media (max-width: 768px) {
+    margin-right: 0;
+    margin-bottom: 15px;
+  }
 `;
 
 const InfoDetails = styled.div`
+  text-align: left;
+  
   h4 {
     font-size: 1.2rem;
     margin-bottom: 5px;
+    color: var(--primary-color);
+    font-weight: 600;
   }
   
   p {
     margin: 0;
     color: var(--text-color);
+    font-size: 1rem;
   }
+  
+  a {
+    color: var(--text-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+    
+    &:hover {
+      color: var(--primary-color);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    text-align: center;
+  }
+`;
+
+const SocialSection = styled.div`
+  text-align: center;
+  margin-top: 40px;
+  padding-top: 30px;
+  border-top: 2px solid var(--light-gray);
+`;
+
+const SocialTitle = styled.h4`
+  font-size: 1.2rem;
+  color: var(--primary-color);
+  margin-bottom: 20px;
+  font-weight: 600;
 `;
 
 const SocialLinks = styled.div`
   display: flex;
   gap: 15px;
-  margin-top: 30px;
+  justify-content: center;
   
   a {
     width: 40px;
@@ -85,6 +171,7 @@ const SocialLinks = styled.div`
     border-radius: 50%;
     transition: var(--transition);
     font-size: 1.2rem;
+    text-decoration: none;
     
     &:hover {
       background-color: var(--primary-color);
@@ -94,236 +181,67 @@ const SocialLinks = styled.div`
   }
 `;
 
-const StyledForm = styled(Form)`
-  .form-label {
-    font-weight: 500;
-  }
-  
-  .form-control {
-    border-radius: var(--border-radius);
-    padding: 12px 15px;
-    border: 1px solid var(--light-gray);
-    
-    &:focus {
-      box-shadow: none;
-      border-color: var(--primary-color);
-    }
-  }
-  
-  textarea.form-control {
-    min-height: 150px;
-  }
-`;
-
-const SubmitButton = styled(Button)`
-  background-color: var(--primary-color);
-  border-color: var(--primary-color);
-  padding: 12px 30px;
-  font-weight: 600;
-  border-radius: 30px;
-  transition: var(--transition);
-  
-  &:hover {
-    background-color: var(--secondary-color);
-    border-color: var(--secondary-color);
-    transform: translateY(-3px);
-  }
-`;
-
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: ""
-  });
-  
-  const [validated, setValidated] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  // eslint-disable-next-line no-unused-vars
-  const [error, setError] = useState(false);
-  
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
-  };
-  
-  const handleSubmit = (e) => {
-    const form = e.currentTarget;
-    e.preventDefault();
-    
-    if (form.checkValidity() === false) {
-      e.stopPropagation();
-      setValidated(true);
-      return;
-    }
-    
-    // Here you would normally send the form data to your server or a third-party service
-    // For demonstration purposes, we'll just show a success message
-    setValidated(true);
-    setSubmitted(true);
-    setFormData({
-      name: "",
-      email: "",
-      subject: "",
-      message: ""
-    });
-    
-    // Reset success message after 5 seconds
-    setTimeout(() => {
-      setSubmitted(false);
-    }, 5000);
-  };
-
   return (
     <ContactSection>
       <Container>
         <SectionTitle>Contact Me</SectionTitle>
         
         <Row>
-          <Col lg={5} className="mb-4">
+          <Col lg={12}>
             <ContactCard>
               <ContactHeading>Get in Touch</ContactHeading>
+              <ContactSubtitle>
+                I'm always open to discussing new opportunities, interesting projects, or just having a chat about technology. Feel free to reach out!
+              </ContactSubtitle>
               
-              <ContactInfo>
-                <IconWrapper>
-                  <i className="fas fa-envelope"></i>
-                </IconWrapper>
-                <InfoDetails>
-                  <h4>Email</h4>
-                  <p>ryanguzimp@gmail.com</p>
-                </InfoDetails>
-              </ContactInfo>
-              
-              <ContactInfo>
-                <IconWrapper>
-                  <i className="fas fa-phone-alt"></i>
-                </IconWrapper>
-                <InfoDetails>
-                  <h4>Phone</h4>
-                  <p>+1 (514) 589-4949</p>
-                </InfoDetails>
-              </ContactInfo>
-              
-              <ContactInfo>
-                <IconWrapper>
-                  <i className="fas fa-map-marker-alt"></i>
-                </IconWrapper>
-                <InfoDetails>
-                  <h4>Location</h4>
-                  <p>Montreal, QC, Canada</p>
-                </InfoDetails>
-              </ContactInfo>
-              
-              <SocialLinks>
-                <a href="https://github.com/ryanguzelian" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-                  <i className="fab fa-github"></i>
-                </a>
-                <a href="https://linkedin.com/in/ryanguzelian" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                  <i className="fab fa-linkedin-in"></i>
-                </a>
-                {/* <a href="https://twitter.com/ryanguzelian" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
-                  <i className="fab fa-twitter"></i>
-                </a> */}
-                {/* <a href="https://instagram.com/ryanguzelian" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-                  <i className="fab fa-instagram"></i>
-                </a> */}
-              </SocialLinks>
-            </ContactCard>
-          </Col>
-          
-          <Col lg={7}>
-            <ContactCard>
-              <ContactHeading>Send Me a Message</ContactHeading>
-              
-              {submitted && (
-                <Alert variant="success" className="mb-4">
-                  <i className="fas fa-check-circle mr-2"></i> Thank you for your message! I'll get back to you as soon as possible.
-                </Alert>
-              )}
-              
-              {error && (
-                <Alert variant="danger" className="mb-4">
-                  <i className="fas fa-exclamation-circle mr-2"></i> Something went wrong. Please try again later.
-                </Alert>
-              )}
-              
-              <StyledForm noValidate validated={validated} onSubmit={handleSubmit}>
-                <Row>
-                  <Col md={6} className="mb-3">
-                    <Form.Group controlId="formName">
-                      <Form.Label>Name</Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        placeholder="Your Name"
-                        required
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        Please provide your name.
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                  </Col>
-                  
-                  <Col md={6} className="mb-3">
-                    <Form.Group controlId="formEmail">
-                      <Form.Label>Email</Form.Label>
-                      <Form.Control
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        placeholder="Your Email"
-                        required
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        Please provide a valid email.
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                  </Col>
-                </Row>
+              <ContactInfoGrid>
+                <ContactInfo>
+                  <IconWrapper>
+                    <i className="fas fa-envelope"></i>
+                  </IconWrapper>
+                  <InfoDetails>
+                    <h4>Email</h4>
+                    <p>
+                      <a href="mailto:ryanguzimp@gmail.com">ryanguzimp@gmail.com</a>
+                    </p>
+                  </InfoDetails>
+                </ContactInfo>
                 
-                <Form.Group controlId="formSubject" className="mb-3">
-                  <Form.Label>Subject</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleChange}
-                    placeholder="Subject"
-                    required
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    Please provide a subject.
-                  </Form.Control.Feedback>
-                </Form.Group>
+                <ContactInfo>
+                  <IconWrapper>
+                    <i className="fas fa-phone-alt"></i>
+                  </IconWrapper>
+                  <InfoDetails>
+                    <h4>Phone</h4>
+                    <p>
+                      <a href="tel:+15145894949">+1 (514) 589-4949</a>
+                    </p>
+                  </InfoDetails>
+                </ContactInfo>
                 
-                <Form.Group controlId="formMessage" className="mb-4">
-                  <Form.Label>Message</Form.Label>
-                  <Form.Control
-                    as="textarea"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    placeholder="Your Message"
-                    required
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    Please provide a message.
-                  </Form.Control.Feedback>
-                </Form.Group>
-                
-                <div className="text-end">
-                  <SubmitButton type="submit">
-                    <i className="fas fa-paper-plane me-2"></i> Send Message
-                  </SubmitButton>
-                </div>
-              </StyledForm>
+                <ContactInfo>
+                  <IconWrapper>
+                    <i className="fas fa-map-marker-alt"></i>
+                  </IconWrapper>
+                  <InfoDetails>
+                    <h4>Location</h4>
+                    <p>Montreal, QC, Canada</p>
+                  </InfoDetails>
+                </ContactInfo>
+              </ContactInfoGrid>
+              
+              <SocialSection>
+                <SocialTitle>Connect with me</SocialTitle>
+                <SocialLinks>
+                  <a href="https://github.com/ryanguzelian" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                    <i className="fab fa-github"></i>
+                  </a>
+                  <a href="https://linkedin.com/in/ryanguzelian" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                    <i className="fab fa-linkedin-in"></i>
+                  </a>
+                </SocialLinks>
+              </SocialSection>
             </ContactCard>
           </Col>
         </Row>
