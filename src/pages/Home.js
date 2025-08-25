@@ -244,7 +244,7 @@ function Home() {
                   <i className="fas fa-database"></i>
                 </FeatureIcon>
                 <FeatureTitle>Backend Solutions</FeatureTitle>
-                <p>Building robust server-side applications and database solutions using MongoDB and other technologies.</p>
+                <p>Building robust server-side applications and database solutions using SQL and NoSQL technologies.</p>
               </FeatureCard>
             </Col>
           </Row>

@@ -415,6 +415,20 @@ const About = () => {
   ];
   const experience = [
     {
+      year: "May 2025 - Present",
+      title: "Software Developer",
+      company: "DataAnnotation",
+      description: "Trained LLM models through the development of various projects and thorough prompt engineering.",
+      position: "left"
+    },
+    {
+      year: "May 2025 - Aug. 2025",
+      title: "QA Automation Intern",
+      company: "Dormakaba",
+      description: "Developed infrastructure supporting automated testing frameworks. Created tests to validate lock audit functionality.",
+      position: "right"
+    },
+    {
       year: "May 2024 - Dec. 2024",
       title: "C# Development Intern",
       company: "Dormakaba",

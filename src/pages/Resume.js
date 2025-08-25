@@ -117,7 +117,7 @@ const Resume = () => {
                   Download Resume
                 </DownloadButton>
                 <Message>
-                  This resume was last updated on June 2025.
+                  This resume was last updated in August 2025.
                 </Message>
               </div>
             </ResumeContent>

@@ -66,7 +66,7 @@ const Footer = ({ changePage }) => {
         <Row>
           <Col md={5} sm={6} className="mb-4">
             <FooterHeading>Ryan Guzelian</FooterHeading>
-            <p>Software Engineering Student passionate about creating elegant solutions to complex problems.</p>
+            <p>Software Engineering Graduate passionate about creating elegant solutions to complex problems.</p>
             <SocialLinks>
               <a href="https://github.com/ryanguzelian" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
                 <i className="fab fa-github"></i>
