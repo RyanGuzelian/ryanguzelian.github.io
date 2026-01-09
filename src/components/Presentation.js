@@ -105,7 +105,7 @@ function Presentation({ title, subtitle, description, primaryBtnText, secondaryB
             onInit={(typewriter) => {
               typewriter
                 .pauseFor(2000)
-                .typeString("Software Engineering Graduate & Developer")
+                .typeString("Software Engineer")
                 .start();
             }}
           />
@@ -132,7 +132,5 @@ function Presentation({ title, subtitle, description, primaryBtnText, secondaryB
     </Container>
   );
 }
-
-export default Presentation;
 
 export default Presentation;

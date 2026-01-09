@@ -190,7 +190,7 @@ function Home() {
                   onInit={(typewriter) => {
                     typewriter
                       // .pauseFor(1000)
-                      .typeString("Software Engineering Graduate")
+                      .typeString("Software Engineer")
                       .pauseFor(1000)
                       .deleteChars(29)
                       .typeString("Full-Stack Developer")

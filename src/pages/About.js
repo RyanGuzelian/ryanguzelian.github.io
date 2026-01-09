@@ -414,8 +414,15 @@ const About = () => {
     }
   ];
   const experience = [
+    {      
+      year: "Jan. 2026 - Present",
+      title: "Software Developer in Test",
+      company: "Genetec",
+      description: "Developing automated tests for the Security Center SaaS platform to improve testing practices and cut down on QA load.",
+      position: "right"
+    },
     {
-      year: "May 2025 - Present",
+      year: "Aug. 2025 - Dec. 2025",
       title: "Software Developer",
       company: "DataAnnotation",
       description: "Trained LLM models through the development of various projects and thorough prompt engineering.",
@@ -461,14 +468,14 @@ const About = () => {
             <AboutContent>
               <AboutHeading>Who I Am</AboutHeading>
               <AboutText>
-                Hello! I'm Ryan Guzelian, a passionate Software Engineering Graduate and Web Developer. 
+                Hello! I'm Ryan Guzelian, a passionate Software Engineer and Web Developer. 
                 I'm dedicated to creating efficient and elegant solutions to complex problems through code. 
                 My journey in programming started when I was in CEGEP, and since then, I've been constantly 
                 learning and improving my skills.
               </AboutText>
               <AboutText>
                 I specialize in full-stack web development using modern technologies like React.js, Node.js, and 
-                .NET. I'm also experienced in Java programming and have worked with various frameworks and tools. 
+                .NET. I'm also experienced in Test Automation, and have worked with various frameworks and tools. 
                 I'm passionate about creating intuitive user experiences and writing clean, maintainable code.
               </AboutText>
               <AboutText>
