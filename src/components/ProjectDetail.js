@@ -1,234 +1,49 @@
 import React from 'react';
-import { Container, Row, Col, Button, Badge } from 'react-bootstrap';
 import styled from 'styled-components';
+import CourtGraphic from './CourtGraphic';
+import { Container, Page, PageTitle, Intro, Actions, PrimaryLink, TextLink, Stack, Prose } from './UI';
 
-const DetailContainer = styled(Container)`
-  padding: 60px 0;
-`;
-
-const ProjectImage = styled.img`
-  width: 100%;
-  height: 400px;
-  object-fit: cover;
-  object-position: center;
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
-  
-  @media (max-width: 768px) {
-    height: 250px;
-  }
-  
-  @media (max-width: 576px) {
-    height: 200px;
+const Detail = styled(Page)`
+  .back { margin-bottom: 28px; }
+  .detail-intro { max-width: 850px; }
+  .detail-visual { margin: 48px 0; }
+  figure.detail-visual { aspect-ratio: 16 / 10; max-height: 600px; overflow: hidden; background: var(--white); }
+  .detail-visual img { width: 100%; height: 100%; object-fit: contain; object-position: center; }
+  .detail-visual.court { padding: 40px; color: var(--mist); background: var(--cobalt); }
+  .detail-visual.court svg { width: min(100%, 880px); margin: 0 auto; }
+  .detail-body { max-width: none; }
+  @media (max-width: 700px) {
+    .detail-visual.court { padding: 20px 8px; }
   }
 `;
-
-const ProjectTitle = styled.h1`
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 20px;
-  color: var(--primary-color);
-`;
-
-const ProjectDescription = styled.div`
-  margin-bottom: 30px;
-  line-height: 1.8;
-  font-size: 1.1rem;
-`;
-
-const ProjectSection = styled.div`
-  margin-bottom: 30px;
-`;
-
-const SectionTitle = styled.h3`
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 15px;
-  color: var(--primary-color);
-  padding-bottom: 10px;
-  border-bottom: 2px solid var(--light-gray);
-`;
-
-const TagsContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 20px;
-`;
-
-const StyledBadge = styled(Badge)`
-  && {
-    background-color: var(--light-bg) !important;
-    color: var(--primary-color) !important;
-    font-weight: 500;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    border: 1px solid var(--light-gray);
-  }
-  
-  &.status {
-    background-color: var(--primary-color);
-    color: white;
-    opacity: ${props => props.status === 'in-progress' ? '0.85' : '0.7'};
-    border: none;
-  }
-
-  &.in-progress {
-      background-color: var(--primary-color) !important;
-      color: white !important;
-      opacity: 0.85;
-      border: none;
-    }
-    
-    &.completed {
-      background-color: var(--primary-color) !important;
-      color: white !important;
-      opacity: 0.7;
-      border: none;
-    }
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  gap: 15px;
-  margin-bottom: 30px;
-  
-  @media (max-width: 576px) {
-    flex-direction: column;
-  }
-`;
-
-const BackButton = styled(Button)`
-  background-color: transparent;
-  color: var(--primary-color);
-  border: 2px solid var(--primary-color);
-  padding: 10px 25px;
-  font-weight: 600;
-  transition: var(--transition);
-  
-  &:hover {
-    background-color: var(--primary-color);
-    color: white;
-  }
-`;
-
-const LinkButton = styled(Button)`
-  background-color: var(--primary-color);
-  border-color: var(--primary-color);
-  padding: 10px 25px;
-  font-weight: 600;
-  transition: var(--transition);
-  
-  &:hover {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-    opacity: 0.9;
-  }
-  
-  i {
-    margin-right: 8px;
-  }
-`;
-
-/**
- * ProjectDetail Component
- * 
- * Displays detailed information about a specific project
- * 
- * @param {Object} project - The project data object
- * @param {Function} onBack - Function to call when "Back" button is clicked
- */
-function ProjectDetail({ project, onBack }) {
-  if (!project) return null;
-  
-  const { 
-    title, 
-    fullDescription, 
-    image, 
-    status, 
-    tags, 
-    links = [],
-    technicalDetails,
-    challenges
-  } = project;
-  
-  // Find GitHub and live links if they exist
-  const githubLink = links.find(link => link.type === "github")?.url;
-  const liveLink = links.find(link => link.type === "live")?.url;
-  
+export default function ProjectDetail({ project }) {
+  const sections = [
+    ['The problem', project.problem],
+    ['My contribution', project.contribution],
+    ['Technical decisions', project.technicalDetails],
+    ['Outcome', project.outcome],
+  ].filter(([, content]) => content);
   return (
-    <DetailContainer>
-      <Row>
-        <Col lg={12} className="mb-4">
-          <BackButton onClick={onBack}>
-            <i className="fas fa-arrow-left mr-2"></i> Back to Projects
-          </BackButton>
-        </Col>
-      </Row>
-      
-      <Row className="mb-5">
-        <Col lg={7} className="mb-4">
-          <ProjectTitle>{title}</ProjectTitle>
-            <TagsContainer>
-            <StyledBadge 
-              className={status === "in-progress" ? "in-progress" : "completed"}
-              status={status}
-            >
-              {status === "in-progress" ? "In Progress" : "Completed"}
-            </StyledBadge>
-              {tags.map((tag, index) => (
-              <StyledBadge key={index}>{tag}</StyledBadge>
-            ))}
-          </TagsContainer>
-          
-          <ProjectDescription>
-            {fullDescription}
-          </ProjectDescription>
-          
-          <ButtonContainer>
-            {githubLink && (
-              <LinkButton href={githubLink} target="_blank" rel="noopener noreferrer">
-                <i className="fab fa-github"></i> View on GitHub
-              </LinkButton>
-            )}
-            
-            {liveLink && (
-              <LinkButton href={liveLink} target="_blank" rel="noopener noreferrer">
-                <i className="fas fa-external-link-alt"></i> Live Demo
-              </LinkButton>
-            )}
-          </ButtonContainer>
-        </Col>
-        
-        <Col lg={5}>
-          <ProjectImage src={image} alt={title} />
-        </Col>
-      </Row>
-      
-      {technicalDetails && (
-        <Row>
-          <Col lg={12}>
-            <ProjectSection>
-              <SectionTitle>Technical Details</SectionTitle>
-              <p>{technicalDetails}</p>
-            </ProjectSection>
-          </Col>
-        </Row>
+    <Detail><Container>
+      <TextLink className="back" href="#projects">Back to work</TextLink>
+      <div className="detail-intro">
+        <PageTitle tabIndex={-1}>{project.title}</PageTitle>
+        <Intro>{project.fullDescription}</Intro>
+        <Stack>{project.tags.join(', ')}{project.status === 'in-progress' ? ' — In progress' : ''}</Stack>
+        <Actions>{(project.links || []).map(link => (
+          <PrimaryLink key={link.url} href={link.url} target="_blank" rel="noopener noreferrer">
+            {link.label || (link.type === 'github' ? 'View source code' : 'Open live project')}
+          </PrimaryLink>
+        ))}</Actions>
+      </div>
+      {project.id === 'courtsy' ? (
+        <div className="detail-visual court"><CourtGraphic /></div>
+      ) : project.image && (
+        <figure className="detail-visual"><img src={project.image} alt={`${project.title} project preview`} /></figure>
       )}
-      
-      {challenges && (
-        <Row>
-          <Col lg={12}>
-            <ProjectSection>
-              <SectionTitle>Challenges & Solutions</SectionTitle>
-              <p>{challenges}</p>
-            </ProjectSection>
-          </Col>
-        </Row>
-      )}
-    </DetailContainer>
+      {sections.length > 0 && <Prose className="detail-body">
+        {sections.map(([title, content]) => <section key={title}><h2>{title}</h2><p>{content}</p></section>)}
+      </Prose>}
+    </Container></Detail>
   );
 }
-
-export default ProjectDetail;

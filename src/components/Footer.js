@@ -1,106 +1,28 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container } from './UI';
 
-const FooterWrapper = styled.footer`
-  background-color: var(--white);
-  padding: 30px 0;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
-  margin-top: 50px;
-`;
-
-const FooterHeading = styled.h5`
-  color: var(--primary-color);
-  font-weight: 600;
-  margin-bottom: 15px;
-`;
-
-const FooterLink = styled.a`
-  color: var(--text-color);
-  display: block;
-  margin-bottom: 8px;
-  cursor: pointer;
-  
-  &:hover {
-    color: var(--secondary-color);
-    text-decoration: none;
+const Wrapper = styled.footer`
+  .footer-inner {
+    border-top: 1px solid var(--line); padding: 28px 0 34px;
+    display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+    font-size: 16px; color: var(--secondary);
   }
+  .footer-links { display: flex; flex-wrap: wrap; gap: 24px; }
+  a { min-height: 44px; display: inline-flex; align-items: center; }
+  .credit { display: flex; align-items: center; }
 `;
-
-const Copyright = styled.div`
-  text-align: center;
-  margin-top: 30px;
-  padding-top: 20px;
-  border-top: 1px solid var(--light-gray);
-  color: #777;
-  font-size: 0.9rem;
-`;
-
-const SocialLinks = styled.div`
-  display: flex;
-  gap: 15px;
-  margin-top: 10px;
-  
-  a {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--light-gray);
-    color: var(--text-color);
-    transition: var(--transition);
-    
-    &:hover {
-      background-color: var(--primary-color);
-      color: white;
-    }
-  }
-`;
-
-const Footer = ({ changePage }) => {
+export default function Footer() {
   return (
-    <FooterWrapper>
-      <Container>
-        <Row>
-          <Col md={5} sm={6} className="mb-4">
-            <FooterHeading>Ryan Guzelian</FooterHeading>
-            <p>Software Engineer passionate about creating elegant solutions to complex problems.</p>
-            <SocialLinks>
-              <a href="https://github.com/ryanguzelian" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-                <i className="fab fa-github"></i>
-              </a>
-              <a href="https://linkedin.com/in/ryanguzelian" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                <i className="fab fa-linkedin-in"></i>
-              </a>
-              <a href="mailto:ryanguzimp@gmail.com" aria-label="Email">
-                <i className="far fa-envelope"></i>
-              </a>
-            </SocialLinks>
-          </Col>
-            <Col md={3} sm={6} className="mb-4">
-            <FooterHeading>Navigation</FooterHeading>
-            <FooterLink onClick={() => changePage("home")}>Home</FooterLink>
-            <FooterLink onClick={() => changePage("projects")}>Projects</FooterLink>
-            <FooterLink onClick={() => changePage("about")}>About</FooterLink>
-            <FooterLink onClick={() => changePage("resume")}>Resume</FooterLink>
-            <FooterLink onClick={() => changePage("contact")}>Contact</FooterLink>
-          </Col>
-          
-          <Col md={3} sm={6} className="mb-4">
-            <FooterHeading>Contact</FooterHeading>
-            <p>Feel free to reach out if you have any questions or would like to collaborate.</p>
-            <FooterLink href="mailto:ryanguzimp@gmail.com">ryanguzimp@gmail.com</FooterLink>
-          </Col>
-        </Row>
-        
-        <Copyright>
-          &copy; {new Date().getFullYear()} Ryan Guzelian. All rights reserved.
-        </Copyright>
-      </Container>
-    </FooterWrapper>
+    <Wrapper>
+      <Container><div className="footer-inner">
+        <p className="credit">© {new Date().getFullYear()} Ryan Guzelian · Montreal</p>
+        <div className="footer-links">
+          <a href="mailto:ryanguzimp@gmail.com">Email</a>
+          <a href="https://github.com/ryanguzelian" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://linkedin.com/in/ryanguzelian" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        </div>
+      </div></Container>
+    </Wrapper>
   );
-};
-
-export default Footer;
+}
