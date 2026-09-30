@@ -1,101 +1,41 @@
-import Container from "react-bootstrap/Container";
-import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
-import NavbarToggle from "react-bootstrap/NavbarToggle";
-import NavbarCollapse from "react-bootstrap/NavbarCollapse";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
+import { Container } from './UI';
 
-const StyledNavbar = styled(Navbar)`
-  box-shadow: var(--box-shadow);
-  background-color: var(--white) !important;
-  padding: 15px 0;
-  
-  .navbar-brand {
-    font-weight: 700;
-    color: var(--primary-color) !important;
-    font-family: var(--header-font);
-    font-size: 1.5rem;
-  }
-  
-  .nav-link {
-    color: var(--text-color) !important;
-    font-weight: 500;
-    margin: 0 10px;
-    position: relative;
-    
-    &:after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background-color: var(--secondary-color);
-      transition: var(--transition);
-    }
-    
-    &:hover:after, &.active:after {
-      width: 100%;
-    }
-    
-    &:hover {
-      color: var(--secondary-color) !important;
-    }
-    
-    &.active {
-      color: var(--secondary-color) !important;
-    }
+const Header = styled.header`
+  padding: 28px 0;
+  .header-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+  .brand { font-size: 23px; font-weight: 600; letter-spacing: -.04em; text-decoration: none; white-space: nowrap; }
+  nav { display: flex; gap: 30px; }
+  nav a { text-decoration: none; min-height: 44px; display: flex; align-items: center; }
+  nav a[aria-current="page"] { text-decoration: underline; text-decoration-color: var(--cobalt); }
+  nav a:hover { text-decoration: underline; }
+  @media (max-width: 600px) {
+    padding: 20px 0 8px;
+    .header-inner { flex-wrap: wrap; gap: 8px; }
+    nav { width: 100%; justify-content: space-between; gap: 12px; font-size: 17px; }
   }
 `;
-
-function Navigation({ changePage, currentPage }) {
+const SkipLink = styled.a`
+  position: absolute; left: 16px; top: 8px; z-index: 10;
+  padding: 10px 18px; background: var(--white); transform: translateY(-180%);
+  &:focus { transform: translateY(0); }
+`;
+export default function Navigation({ currentPage }) {
   return (
-    <StyledNavbar
-      bg="light"
-      data-bs-theme="light"
-      sticky="top"
-      expand="sm"
-      className="bg-body-tertiary"
-    >
-      <Container>
-        <Navbar.Brand href="#home">Ryan Guzelian</Navbar.Brand>
-        <NavbarToggle aria-controls="basic-navbar-nav" />
-        <NavbarCollapse id="basic-navbar-nav">          <Nav className="ms-auto">
-            <Nav.Link 
-              onClick={() => changePage("home")} 
-              className={currentPage === "home" ? "active" : ""}
-            >
-              Home
-            </Nav.Link>
-            <Nav.Link 
-              onClick={() => changePage("projects")} 
-              className={currentPage === "projects" ? "active" : ""}
-            >
-              Projects
-            </Nav.Link>
-            <Nav.Link 
-              onClick={() => changePage("about")} 
-              className={currentPage === "about" ? "active" : ""}
-            >
-              About
-            </Nav.Link>
-            <Nav.Link 
-              onClick={() => changePage("resume")} 
-              className={currentPage === "resume" ? "active" : ""}
-            >
-              Resume
-            </Nav.Link>
-            <Nav.Link 
-              onClick={() => changePage("contact")} 
-              className={currentPage === "contact" ? "active" : ""}
-            >
-              Contact
-            </Nav.Link>
-          </Nav>
-        </NavbarCollapse>
+    <Header>
+      <SkipLink href="#main-content" onClick={event => {
+        event.preventDefault();
+        document.getElementById('main-content')?.focus();
+      }}>Skip to content</SkipLink>
+      <Container className="header-inner">
+        <a className="brand" href="#home" aria-label="Ryan Guzelian, home">Ryan Guzelian</a>
+        <nav aria-label="Main navigation">
+          {[['projects', 'Work'], ['about', 'About'], ['resume', 'Resume'], ['contact', 'Contact']].map(([page, label]) => (
+            <a key={page} href={`#${page}`} aria-current={currentPage === page ? 'page' : undefined}>{label}</a>
+          ))}
+        </nav>
       </Container>
-    </StyledNavbar>
+    </Header>
   );
 }
-
-export default Navigation;

@@ -1,185 +1,104 @@
-/**
- * Projects Data File
- * 
- * This file contains all the project data for the portfolio.
- * To add a new project:
- * 1. Import the project image
- * 2. Add a new object to the projects array with the following structure:
- *    {
- *      id: "unique-identifier",
- *      title: "Project Title",
- *      shortDescription: "Brief description (displayed in cards)",
- *      fullDescription: "Detailed description (displayed in project details)",
- *      image: ImportedImage,
- *      status: "completed" OR "in-progress",
- *      tags: ["tag1", "tag2", "tag3"],
- *      links: [
- *        { type: "github", url: "https://github.com/..." },
- *        { type: "live", url: "https://..." }
- *      ],
- *      technicalDetails: "Technical implementation details...",
- *      challenges: "Challenges faced and how they were solved...",
- *      featured: true OR false (whether to highlight in featured projects)
- *    }
- */
+import Asteroids from '../images/asteroids.jpg';
+import Maalem from '../images/maalem.jpg';
+import Organik from '../images/organik.jpg';
+import Hired from '../images/hired.jpg';
+import Collatz from '../images/collatz.jpg';
+import Blackout from '../images/blackout-preview.png';
+import Condo from '../images/Condo.png';
+import Medca from '../images/medca.png';
+import Bargain from '../images/bargain.jpg';
+import Attendance from '../images/attendance.png';
 
-// Import project images
-import Asteroids from "../images/asteroids.jpg";
-import Maalem from "../images/maalem.jpg";
-import Organik from "../images/organik.jpg";
-import Hired from "../images/hired.jpg";
-import Collatz from "../images/collatz.jpg";
-import Blackout from "../images/Blackout.gif";
-import Condo from "../images/Condo.png";
-import Medca from "../images/medca.png";
-import Bargain from "../images/bargain.jpg";
-import Attendance from "../images/attendance.png";  
-
-// Project data array
+// Shared by the homepage, searchable archive and directly linked case studies.
 const projects = [
-  
   {
-    id: "medca",
-    title: "MedcaConnect",
-    shortDescription: "Instant Personalized Support Circles",
-    fullDescription: "Medca Connect is here to make life a little easier for people who feel alone due to illness, mental health issues, or addiction. The platform is built with React Native, Express.JS, Node.JS, as well as MongoDB for the database. Not only was the work completed on this project full-stack, it gave me exposure to the world of mobile development, as well as the importance of security in applications.",
-    image: Medca,
-    status: "completed",
-    tags: ["Mobile Development", "React Native", "Node.JS", "Express.JS"],
-    technicalDetails: "RESTful API backend with Express.JS, mobile application build with React Native, MongoDB database for storage. JWT for secure user authentication.",
-    challenges: "Implementation of video calling and messaging through Agora libraries.",
-    featured: true
+    id: 'courtsy', title: 'Courtsy',
+    shortDescription: 'Booking and CRM for sports facilities. An independent product, from design to deployment.',
+    fullDescription: 'I independently designed, built, and deployed Courtsy, a multi-tenant booking and CRM platform for sports complexes.',
+    status: 'completed', tags: ['React', '.NET', 'PostgreSQL', 'Docker'], featured: true,
+    links: [{ type: 'live', url: 'https://www.courtsy.ca', label: 'Visit Courtsy' }],
+    problem: 'Sports complexes need to manage bookings and customer relationships. Serving multiple facilities from one platform also requires keeping each tenant’s resources separate.',
+    contribution: 'I owned the product from design through implementation and deployment, building the React interface, .NET backend, and PostgreSQL data layer.',
+    technicalDetails: 'The platform uses React, .NET, PostgreSQL, and Docker. I designed custom token-based authentication with role-based access control, and a resource-ownership resolver that prevents insecure direct object references across tenant boundaries.',
+    outcome: 'A deployed booking and CRM product, with authorization designed around both user roles and tenant ownership.',
   },
   {
-    id: "condo",
-    title: "Condo Management Web Application",
-    shortDescription: "Residential estate management project",
-    fullDescription: "This project allows landlords to manage their tenants and keep track of their expenses/income.",
-    image: Condo,
-    status: "completed",
-    tags: ["Web Development", "Next.JS", "Database Design", "API development"],
-    links: [
-      { type: "github", url: "https://github.com/CONCORDIA-SOEN-390/Condo-Mgmt-Web-App"},
-      { type: "live", url: "https://condo-mgmt-web-app.vercel.app/" }
-    ],
-    technicalDetails: "RESTful API backend with Next.JS, Supabase database for data storage.",
-    featured: true
+    id: 'medca', title: 'MedcaConnect', image: Medca, featured: true, status: 'completed',
+    shortDescription: 'A mobile platform for support circles, with video calls and live messaging.',
+    fullDescription: 'MedcaConnect helps people experiencing illness, mental health issues, or addiction connect with a support circle.',
+    tags: ['React Native', 'Node.js', 'Express.js', 'MongoDB'],
+    contribution: 'I worked across the mobile application and backend, integrating video calling and live messaging through Agora.',
+    technicalDetails: 'React Native provides the mobile interface, with an Express.js API and MongoDB for storage. I implemented JWT authentication and containerized services with Docker.',
+    outcome: 'Hands-on experience delivering a mobile interface, real-time communication, and authenticated backend services together.',
   },
   {
-    id: "collatz",
-    title: "Collatz Conjecture Solution",
-    shortDescription: "Research project attempting to solve the Collatz Conjecture using pattern recognition algorithms.",
-    fullDescription: "While being more of an analysis/research type of project, I am attempting to solve the Collatz Conjecture by using algorithms to find patterns that appear in the recursion process. This has allowed me to deepen my understanding of pattern recognition methods.",
-    image: Collatz,
-    status: "in-progress",
-    tags: ["Data Analysis", "Pattern Recognition", "Algorithms", "Research"],
-    // links: [
-    //   { type: "github", url: "https://github.com/ryanguzelian/collatz-conjecture" }
-    // ],
-    technicalDetails: "Implementing various algorithms to identify patterns in the Collatz sequences, using data visualization techniques to analyze results.",
-    challenges: "Working with potentially infinite sequences and optimizing computation time for large numbers.",
-    featured: false
+    id: 'attendance', title: 'Attendance Management System', image: Attendance, featured: true, status: 'completed',
+    shortDescription: 'An exam attendance system connecting a physical card reader to a web application.',
+    fullDescription: 'Students tap their ID card on a reader to record their attendance at an exam.',
+    tags: ['Arduino', 'C++', 'React', 'Express.js', 'AWS EC2'],
+    links: [{ type: 'live', url: 'https://soen-422-project.vercel.app/' }],
+    contribution: 'I built a hardware board using Arduino libraries and a MiFare reader, along with a companion web application.',
+    technicalDetails: 'C++ runs on the Arduino hardware. The React interface communicates with an Express.js API, deployed on AWS EC2, with Supabase for data storage.',
+    outcome: 'A project that connected embedded hardware, a web interface, and a remotely hosted backend.',
   },
   {
-    id: "attendance",
-    title: "Attendance Management System",
-    shortDescription: "Complete embedded system solution to manage attendance to exams.",
-    fullDescription: "The AMS was made as a way to render the Concordia campus \"smart\". Through its intuitive design, students are able to simply tap their ID cards to the reader to log their attendance to an exam, saving over 10 minutes per exam and thus potentially minimizing administrative costs.",
-    image: Attendance,
-    status: "completed",
-    tags: ["Arduino", "AWS EC2", "React.JS", "Express.JS", "C++"],
-    links: [
-      { type: "live", url: "https://soen-422-project.vercel.app/" },
-    ],
-    technicalDetails: "Frontend built with React.JS and hosted on Vercel, backend RESTful API with Express.JS, hosted on AWS EC2. Supabase database for data storage. Arduino board using code written in C++. Utilizes MiFare technology for attendance tracking.",
-    challenges: "Tried implementing Agora's voice calling libraries which have intergation with OpenAI's APIs, but ended up using RTC connections instead.",
-    featured: true
+    id: 'condo', title: 'Condo Management Web Application', image: Condo, featured: false, status: 'completed',
+    shortDescription: 'A web application for managing tenants, residential properties, and expenses.',
+    fullDescription: 'A residential property management project that lets landlords manage tenants and track income and expenses.',
+    tags: ['Next.js', 'Supabase', 'Database design', 'API development'],
+    links: [{ type: 'github', url: 'https://github.com/CONCORDIA-SOEN-390/Condo-Mgmt-Web-App' }, { type: 'live', url: 'https://condo-mgmt-web-app.vercel.app/' }],
+    technicalDetails: 'A Next.js application with API endpoints and Supabase for data storage.',
   },
   {
-    id: "bargain",
-    title: "Bargain Bot",
-    shortDescription: "AI-powered agent for negotiating ISP prices.",
-    fullDescription: "Bargain Bot is an AI-powered agent designed to negotiate internet service provider (ISP) prices on behalf of users. It uses OpenAI's realtime API to negotiate deals on behalf of the user.",
-    image: Bargain,
-    status: "completed",
-    tags: ["AI", "React.JS", "Node.JS", "Express.JS"],
-    links: [
-      { type: "github", url: "https://github.com/McHacksNegotiator/NegotiationApp" },
-    ],
-    technicalDetails: "RESTful API backend with Express.JS, web application build with React. Utilizes OpenAI realtime LLM APIs for time-sensitive user voice data processing.",
-    challenges: "Tried implementing Agora's voice calling libraries which have intergation with OpenAI's APIs, but ended up using RTC connections instead.",
-    featured: true
+    id: 'bargain', title: 'Bargain Bot', image: Bargain, featured: false, status: 'completed',
+    shortDescription: 'A voice agent exploring how to negotiate internet service prices.',
+    fullDescription: 'Bargain Bot is a project exploring voice-based negotiation of internet service provider prices on a user’s behalf.',
+    tags: ['AI', 'React', 'Node.js', 'Express.js'],
+    links: [{ type: 'github', url: 'https://github.com/McHacksNegotiator/NegotiationApp' }],
+    technicalDetails: 'A React interface and Express.js backend, using the OpenAI realtime API for voice processing.',
   },
   {
-    id: "blackout",
-    title: "Blackout Launcher",
-    shortDescription: "Android launcher designed to reduce smartphone addiction by creating a minimalist UI experience.",
-    fullDescription: "This android launcher aims to reduce people's addiction to smartphones by stripping away dopamine-inducing parts of the UI, while still providing a solid user experience.",
-    image: Blackout,
-    status: "in-progress",
-    tags: ["Android", "UI/UX Design", "Digital Wellbeing"],
-    // links: [
-    //   { type: "github", url: "https://github.com/ryanguzelian/blackout-launcher" }
-    // ],
-    technicalDetails: "Built using Kotlin and the Android SDK, with a focus on customizable UI elements and notification management.",
-    challenges: "Balancing minimalist design with necessary functionality to ensure the launcher remains practical for daily use.",
-    featured: false
+    id: 'hired', title: 'Hired', image: Hired, featured: false, status: 'completed',
+    shortDescription: 'A full-stack job search platform connecting employers and applicants.',
+    fullDescription: 'Hired brings job seekers and employers together in a React application backed by Express.js and MongoDB.',
+    tags: ['React', 'Express.js', 'MongoDB', 'Full-stack'],
+    links: [{ type: 'github', url: 'https://github.com/RyanGuzelian/Alpha_team_soen341project2023' }],
+    contribution: 'I contributed across the frontend and backend and served as scrum master for the team.',
+    technicalDetails: 'React on the frontend, an Express.js API, and MongoDB for user profiles and job listings.',
   },
   {
-    id: "hired",
-    title: "Hired",
-    shortDescription: "Full-stack job search platform connecting employers and job seekers.",
-    fullDescription: "This platform allows job seekers and employers to connect with each other, creating a seamless experience for all users. It utilizes React.JS, Express.JS, Node.JS, as well as MongoDB for the database. Not only was the work completed on this project full stack, it allowed me to act as a scrum master, where I learned how to further act as a leader.",
-    image: Hired,
-    status: "completed",
-    tags: ["React.JS", "Express.JS", "MongoDB", "Full-Stack"],
-    links: [
-      { type: "github", url: "https://github.com/RyanGuzelian/Alpha_team_soen341project2023" },
-      // { type: "live", url: "https://hired-platform.herokuapp.com/" }
-    ],
-    technicalDetails: "RESTful API backend with Express.js, MongoDB database for user profiles and job listings, React.js frontend with responsive design.",
-    challenges: "Implementing real-time notifications for job applications and managing user authentication securely.",
-    featured: true
+    id: 'maalem', title: 'Maalem', image: Maalem, featured: false, status: 'completed',
+    shortDescription: 'A peer-to-peer student help application with real-time chat.',
+    fullDescription: 'Maalem is a student help application with a custom messaging system and Google sign-in.',
+    tags: ['React', 'Node.js', 'Docker', 'WebSockets'],
+    links: [{ type: 'github', url: 'https://github.com/RyanGuzelian/Maalem' }],
+    technicalDetails: 'React and Node.js, WebSockets for chat, Google authentication, and Docker for containerization.',
   },
   {
-    id: "maalem",
-    title: "Maalem",
-    shortDescription: "Peer-to-peer student help web application featuring real-time messaging.",
-    fullDescription: "This peer-to-peer student help web app was made using React.JS, Node.JS, while utilizing the benefits of Docker, as well as the power of websockets for a custom messaging system that was reliant on the Google sign-In API.",
-    image: Maalem,
-    status: "completed",
-    tags: ["React.JS", "Node.JS", "Docker", "WebSockets"],
-    links: [
-      { type: "github", url: "https://github.com/RyanGuzelian/Maalem" },
-    ],
-    technicalDetails: "WebSocket implementation for real-time chat functionality, containerized with Docker for consistent deployment, Google OAuth integration for authentication.",
-    challenges: "Managing real-time connections and ensuring message delivery even with unreliable network conditions.",
-    featured: true
+    id: 'blackout', title: 'Blackout Launcher', image: Blackout, featured: false, status: 'in-progress',
+    shortDescription: 'An Android launcher exploring a quieter smartphone interface.',
+    fullDescription: 'An Android launcher that aims to reduce distracting parts of the interface while preserving everyday usability.',
+    tags: ['Android', 'UI/UX design', 'Digital wellbeing'],
   },
   {
-    id: "asteroids",
-    title: "Asteroids",
-    shortDescription: "Recreation of the classic Asteroids game using Java and Slick2D library.",
-    fullDescription: "This recreation of the retro asteroids game was an introduction to game development that was done in Java, with the Slick2D library. While the library itself is outdated, it allowed for a deeper understanding of OOP concepts as well as the render/display cycle encountered in gaming environments, and how to control it.",
-    image: Asteroids,
-    status: "completed",
-    tags: ["Java", "OOP", "Game Development", "Slick2D"],
-    technicalDetails: "Implemented game physics including collision detection, particle effects for explosions, and game state management.",
-    challenges: "Optimizing rendering performance while maintaining smooth gameplay and handling multiple moving objects.",
-    featured: false
+    id: 'collatz', title: 'Collatz Conjecture Exploration', image: Collatz, featured: false, status: 'in-progress',
+    shortDescription: 'An exploration of patterns in Collatz sequences.',
+    fullDescription: 'An ongoing research exercise using algorithms to explore patterns in Collatz sequences. This is an investigation, not a claimed solution to the conjecture.',
+    tags: ['Data analysis', 'Pattern recognition', 'Algorithms', 'Research'],
   },
   {
-    id: "organik",
-    title: "Organik",
-    shortDescription: "Grocery store website with modern UI design and e-commerce functionality.",
-    fullDescription: "This grocery store webpage was made using basic web development technologies, such as JavaScript, PHP, HTML, and CSS. While not necessarily a 'stack', it allowed for a deeper understanding of web development methodologies, as well as a solid foundation of UI design.",
-    image: Organik,
-    status: "completed",
-    tags: ["JavaScript", "PHP", "HTML/CSS", "UI Design"],
-    technicalDetails: "PHP backend for product management and user sessions, responsive design using CSS Grid and Flexbox.",
-    challenges: "Creating a visually appealing interface while ensuring compatibility across different browsers and screen sizes.",
-    featured: false
-  }
+    id: 'asteroids', title: 'Asteroids', image: Asteroids, featured: false, status: 'completed',
+    shortDescription: 'A Java recreation of the classic arcade game.',
+    fullDescription: 'A recreation of Asteroids built with Java and Slick2D, exploring object-oriented programming, rendering, and game controls.',
+    tags: ['Java', 'OOP', 'Game development', 'Slick2D'],
+    technicalDetails: 'Java and the Slick2D library for the game’s rendering and input loop.',
+  },
+  {
+    id: 'organik', title: 'Organik', image: Organik, featured: false, status: 'completed',
+    shortDescription: 'An early grocery store website built with core web technologies.',
+    fullDescription: 'A grocery store website built with JavaScript, PHP, HTML, and CSS, developing my foundation in web development and interface design.',
+    tags: ['JavaScript', 'PHP', 'HTML/CSS', 'UI design'],
+  },
 ];
 
 export default projects;

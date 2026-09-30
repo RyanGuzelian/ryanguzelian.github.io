@@ -1,257 +1,94 @@
-import React from "react";
-import styled from "styled-components";
-import { Container, Row, Col, Button } from "react-bootstrap";
-import Typewriter from "typewriter-effect";
-import Gif from "../images/ProgrammingGif.gif";
-// eslint-disable-next-line no-unused-vars
-import { Link } from "react-router-dom";
+import React from 'react';
+import styled from 'styled-components';
+import CourtGraphic from '../components/CourtGraphic';
+import ProjectFeature from '../components/ProjectFeature';
+import ProjectCard from '../components/ProjectCard';
+import projects from '../data/projects';
+import { Container, SectionHeading, Actions, PrimaryLink, TextLink } from '../components/UI';
 
-const HeroSection = styled.section`
-  padding: 80px 0;
-  background: linear-gradient(to right, var(--light-bg), var(--white));
-  
-  @media (max-width: 768px) {
-    padding: 50px 0;
-    text-align: center;
+const Hero = styled.section`
+  padding: 64px 0 96px;
+  .hero-grid { display: grid; grid-template-columns: 1.45fr 1fr; gap: 48px; align-items: center; }
+  h1 { font-size: clamp(88px, 10.8vw, 154px); line-height: .9; letter-spacing: -.025em; }
+  .hero-copy > p { max-width: 570px; margin: 32px 0; font-size: 23px; color: var(--secondary); }
+  .hero-art { min-width: 0; align-self: stretch; display: flex; flex-direction: column; justify-content: center; }
+  .art-field {
+    position: relative; overflow: hidden; height: 390px; background: var(--cobalt);
+    clip-path: polygon(25% 0, 100% 0, 100% 100%, 0 100%);
+    color: var(--mist);
+  }
+  .art-field svg { position: absolute; width: 660px; max-width: none; top: 98px; left: 56px; transform: rotate(-18deg); }
+  figcaption { margin-top: 22px; padding-left: 20px; color: var(--secondary); font-size: 16px; }
+  figcaption a { font-weight: 600; color: var(--navy); }
+  @media (max-width: 900px) {
+    .hero-grid { gap: 28px; grid-template-columns: 1.2fr 1fr; }
+    h1 { font-size: 100px; }
+    .art-field { height: 330px; }
+    .art-field svg { width: 500px; top: 100px; left: 35px; }
+  }
+  @media (max-width: 700px) {
+    padding: 36px 0 56px;
+    .hero-grid { grid-template-columns: 1fr; gap: 38px; }
+    h1 { font-size: clamp(80px, 17vw, 116px); }
+    .hero-copy > p { font-size: 21px; margin: 26px 0; }
+    .art-field { height: 230px; }
+    .art-field svg { width: 520px; top: 36px; left: 32px; }
+    figcaption { padding-left: 0; }
   }
 `;
-
-const HeroHeading = styled.h1`
-  font-size: 3.5rem;
-  font-weight: 700;
-  margin-bottom: 20px;
-  color: var(--primary-color);
-  
-  @media (max-width: 768px) {
-    font-size: 2.5rem;
-  }
-  
-  span {
-    color: var(--secondary-color);
+const WorkSection = styled.section`
+  padding: 56px 0 84px; border-top: 1px solid var(--line);
+  .section-head { display: flex; justify-content: space-between; gap: 20px; align-items: center; margin-bottom: 48px; flex-wrap: wrap; }
+  .other-work { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; margin-top: 64px; }
+  @media (max-width: 700px) {
+    padding: 40px 0 56px;
+    .section-head { margin-bottom: 32px; }
+    .other-work { grid-template-columns: 1fr; gap: 44px; margin-top: 44px; }
   }
 `;
-
-const HeroSubheading = styled.div`
-  font-size: 1.5rem;
-  margin-bottom: 30px;
-  color: var(--text-color);
-  font-weight: 400;
-  
-  @media (max-width: 768px) {
-    font-size: 1.2rem;
+const Experience = styled.section`
+  padding: 68px 0 76px; background: var(--white);
+  .experience-grid { display: grid; grid-template-columns: 1fr 1.25fr; gap: 80px; }
+  .experience-role { font-size: 27px; line-height: 1.2; margin-bottom: 18px; }
+  .experience-copy { color: var(--secondary); }
+  .experience-copy + .experience-copy { margin-top: 20px; }
+  .experience-link { margin-top: 24px; }
+  .contact-note { margin-top: 54px; padding-top: 28px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 16px 32px; align-items: center; }
+  @media (max-width: 700px) {
+    padding: 44px 0; .experience-grid { grid-template-columns: 1fr; gap: 28px; }
   }
 `;
-
-const HeroDescription = styled.p`
-  font-size: 1.1rem;
-  margin-bottom: 30px;
-  max-width: 600px;
-  line-height: 1.8;
-  
-  @media (max-width: 768px) {
-    text-align: center;
-    margin: 0 auto 30px;
-  }
-`;
-
-const HeroImage = styled.img`
-  width: 100%;
-  max-width: 500px;
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
-  transition: var(--transition);
-  
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-  }
-  
-  @media (max-width: 768px) {
-    margin-top: 30px;
-  }
-`;
-
-const FeatureSection = styled.section`
-  padding: 80px 0;
-  background-color: var(--white);
-  
-  @media (max-width: 768px) {
-    padding: 50px 0;
-  }
-`;
-
-const SectionTitle = styled.h2`
-  font-size: 2.5rem;
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: 50px;
-  color: var(--primary-color);
-  
-  &:after {
-    content: '';
-    display: block;
-    width: 80px;
-    height: 4px;
-    margin: 15px auto 0;
-    background-color: var(--secondary-color);
-  }
-`;
-
-const FeatureCard = styled.div`
-  padding: 30px;
-  background-color: var(--white);
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
-  height: 100%;
-  transition: var(--transition);
-  
-  &:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-  }
-`;
-
-const FeatureIcon = styled.div`
-  font-size: 2.5rem;
-  color: var(--secondary-color);
-  margin-bottom: 20px;
-`;
-
-const FeatureTitle = styled.h3`
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 15px;
-  color: var(--primary-color);
-`;
-
-const ActionButton = styled(Button)`
-  background-color: var(--primary-color);
-  border-color: var(--primary-color);
-  font-weight: 600;
-  padding: 10px 25px;
-  border-radius: 30px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: var(--transition);
-  
-  &:hover {
-    background-color: var(--secondary-color);
-    border-color: var(--secondary-color);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-  }
-  
-  &.outline {
-    background-color: transparent;
-    color: var(--primary-color);
-    border: 2px solid var(--primary-color);
-    margin-left: 15px;
-    
-    &:hover {
-      color: white;
-      background-color: var(--primary-color);
-    }
-  }
-`;
-
-const ButtonGroup = styled.div`
-  @media (max-width: 576px) {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    
-    ${ActionButton}.outline {
-      margin-left: 0;
-    }
-  }
-`;
-
-function Home() {
+export default function Home() {
   return (
     <>
-      <HeroSection>
-        <Container>
-          <Row className="align-items-center">
-            <Col lg={6} className="mb-4 mb-lg-0">
-              <HeroHeading>
-                {/* <Typewriter
-                  options={{ cursor: "" }}
-                  onInit={(typewriter) => {
-                    typewriter
-                      .typeString("Hi, I'm ")
-                      .typeString("<span>Ryan Guzelian</span>")
-                      .start();
-                  }}
-                /> */}
-                 <span>Hi, I'm Ryan Guzelian</span>
-              </HeroHeading>
-              <HeroSubheading>
-                <Typewriter
-                  options={{  delay:"20", deleteSpeed:"20", loop:true }}
-                  onInit={(typewriter) => {
-                    typewriter
-                      // .pauseFor(1000)
-                      .typeString("Software Engineer")
-                      .pauseFor(1000)
-                      .deleteChars(29)
-                      .typeString("Full-Stack Developer")
-                      .pauseFor(1000)
-                      .deleteChars(21)
-                      .start();
-                  }}
-                />
-              </HeroSubheading>
-              <HeroDescription>
-                I'm passionate about creating efficient and elegant solutions to complex problems through code. 
-                My portfolio showcases my journey and expertise in software development.
-              </HeroDescription>
-              <ButtonGroup>
-                <ActionButton onClick={() => window.location.hash = "projects"}>View Projects</ActionButton>
-                <ActionButton className="outline" onClick={() => window.location.hash = "contact"}>Get In Touch</ActionButton>
-              </ButtonGroup>
-            </Col>
-            <Col lg={6} className="text-center">
-              <HeroImage src={Gif} alt="Programming Animation" />
-            </Col>
-          </Row>
-        </Container>
-      </HeroSection>
-      
-      <FeatureSection>
-        <Container>
-          <SectionTitle>What I Do</SectionTitle>
-          <Row>
-            <Col md={4} className="mb-4">
-              <FeatureCard>
-                <FeatureIcon>
-                  <i className="fas fa-code"></i>
-                </FeatureIcon>
-                <FeatureTitle>Web Development</FeatureTitle>
-                <p>Creating responsive and user-friendly web applications using modern technologies like React.js and Node.js.</p>
-              </FeatureCard>
-            </Col>
-            <Col md={4} className="mb-4">
-              <FeatureCard>
-                <FeatureIcon>
-                  <i className="fas fa-mobile-alt"></i>
-                </FeatureIcon>
-                <FeatureTitle>App Development</FeatureTitle>
-                <p>Designing intuitive mobile experiences and applications that solve real-world problems.</p>
-              </FeatureCard>
-            </Col>
-            <Col md={4} className="mb-4">
-              <FeatureCard>
-                <FeatureIcon>
-                  <i className="fas fa-database"></i>
-                </FeatureIcon>
-                <FeatureTitle>Backend Solutions</FeatureTitle>
-                <p>Building robust server-side applications and database solutions using SQL and NoSQL technologies.</p>
-              </FeatureCard>
-            </Col>
-          </Row>
-        </Container>
-      </FeatureSection>
+      <Hero><Container><div className="hero-grid">
+        <div className="hero-copy">
+          <h1 tabIndex={-1}>Software<br />built with<br />care.</h1>
+          <p>Software developer in Montreal. Building public APIs in Go at Genetec, and Courtsy, a booking platform for sports facilities.</p>
+          <Actions><PrimaryLink href="#projects">Explore my work</PrimaryLink><TextLink href="#resume">Resume</TextLink></Actions>
+        </div>
+        <figure className="hero-art">
+          <div className="art-field"><CourtGraphic /></div>
+          <figcaption>A place to play. A product to build.<br /><a href="#projects/courtsy">Meet Courtsy</a></figcaption>
+        </figure>
+      </div></Container></Hero>
+      <WorkSection><Container>
+        <div className="section-head"><SectionHeading>Selected work</SectionHeading><TextLink href="#projects">View all work</TextLink></div>
+        <ProjectFeature project={projects[0]} headingLevel="h3" />
+        <div className="other-work">{projects.filter(project => ['medca', 'attendance'].includes(project.id)).map(project => <ProjectCard project={project} key={project.id} />)}</div>
+      </Container></WorkSection>
+      <Experience><Container>
+        <div className="experience-grid">
+          <SectionHeading>Currently at<br />Genetec.</SectionHeading>
+          <div>
+            <h3 className="experience-role">Software Developer, Go</h3>
+            <p className="experience-copy">I’m building an API gateway that exposes internal Security Center SaaS services as public APIs, with a React interface to configure and inspect published endpoints.</p>
+            <p className="experience-copy">Before that, I built the mobile test infrastructure and automated 15+ core user flows. Parallel execution cut suite runtime by 60%.</p>
+            <TextLink className="experience-link" href="#about">More about my experience</TextLink>
+          </div>
+        </div>
+        <div className="contact-note"><p>Have an engineering opportunity in mind?</p><TextLink href="mailto:ryanguzimp@gmail.com">ryanguzimp@gmail.com</TextLink></div>
+      </Container></Experience>
     </>
   );
 }
-
-export default Home;
