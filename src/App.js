@@ -1,82 +1,147 @@
-import React, { useState, useEffect } from "react";
-import Home from "./pages/Home";
-import "./App.css";
-import Navigation from "./components/Navigation";
-import GlobalStyles from "./components/GlobalStyles";
-import "bootstrap/dist/css/bootstrap.css";
-import Projects from "./pages/Projects";
-import About from "./pages/About";
-import Contact from "./pages/Contact";
-import Resume from "./pages/Resume";
-import Footer from "./components/Footer";
+import React, { useCallback, useRef, useState } from "react";
 import styled from "styled-components";
-import { createGlobalStyle } from "styled-components";
 
-// Import Google Fonts
-const FontStyles = createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;500;600&display=swap');
+import GlobalStyles from "./components/GlobalStyles";
+import DesktopIcons from "./components/DesktopIcons";
+import Taskbar from "./components/Taskbar";
+import StartMenu from "./components/StartMenu";
+
+import AboutWindow from "./windows/AboutWindow";
+import ExperienceWindow from "./windows/ExperienceWindow";
+import ProjectsWindow from "./windows/ProjectsWindow";
+import ProjectDetailWindow from "./windows/ProjectDetailWindow";
+import SkillsWindow from "./windows/SkillsWindow";
+import ContactWindow from "./windows/ContactWindow";
+
+import useWindows from "./hooks/useWindows";
+
+const Desktop = styled.div`
+  position: relative;
+  min-height: calc(100vh - var(--taskbar-h));
+  padding: 8px 8px 16px;
+
+  @media (min-width: 821px) {
+    padding: 14px;
+  }
 `;
 
-const MainContainer = styled.div`
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-`;
+export const TITLES = {
+  about: "About Ryan",
+  experience: "Experience",
+  projects: "Projects",
+  skills: "Skills Properties",
+  contact: "Contact",
+  detail: "Properties",
+};
 
-const ContentWrapper = styled.main`
-  flex: 1;
-`;
+export const ICONS = {
+  about: "user",
+  experience: "briefcase",
+  projects: "folder",
+  skills: "gear",
+  contact: "mail",
+  detail: "doc",
+};
 
 function App() {
-  const [currentPage, setCurrentPage] = useState("home");
-  useEffect(() => {
-    // Get page from URL hash if it exists
-    const hash = window.location.hash.replace('#', '');
-    if (hash && ["home", "projects", "about", "contact", "resume"].includes(hash)) {
-      setCurrentPage(hash);
-    }
-    
-    // Update hash when page changes
-    window.addEventListener('hashchange', () => {
-      const newHash = window.location.hash.replace('#', '');
-      if (newHash && ["home", "projects", "about", "contact", "resume"].includes(newHash)) {
-        setCurrentPage(newHash);
-      }
-    });
-  }, []);
+  const hostRef = useRef(null);
+  const [startOpen, setStartOpen] = useState(false);
+  const [project, setProject] = useState(null);
 
-  const changePage = (page) => {
-    setCurrentPage(page);
-    window.location.hash = page;
-    window.scrollTo(0, 0);
-  };
-  const renderPage = () => {
-    switch (currentPage) {
-      case "home":
-        return <Home />;
-      case "projects":
-        return <Projects />;
-      case "about":
-        return <About />;
-      case "contact":
-        return <Contact />;
-      case "resume":
-        return <Resume />;
-      default:
-        return <Home />;
-    }
-  };
+  const {
+    open,
+    minimized,
+    activeId,
+    openWindow,
+    closeWindow,
+    toggleMinimize,
+    toggleMaximize,
+    taskbarClick,
+    focus,
+    startDrag,
+    styleFor,
+  } = useWindows(hostRef);
+
+  /** Everything a content window needs to be a window. */
+  const chrome = useCallback(
+    (id, { resizable = true } = {}) => ({
+      id,
+      active: activeId === id,
+      hidden: minimized[id],
+      geometry: styleFor(id),
+      onFocus: () => focus(id),
+      onClose: () => closeWindow(id),
+      onMinimize: () => toggleMinimize(id),
+      onMaximize: resizable ? () => toggleMaximize(id) : undefined,
+      onDragStart: (e) => startDrag(id, e),
+    }),
+    [
+      activeId,
+      minimized,
+      styleFor,
+      focus,
+      closeWindow,
+      toggleMinimize,
+      toggleMaximize,
+      startDrag,
+    ]
+  );
+
+  const isOpen = (id) => open.includes(id);
+
+  const showProject = useCallback(
+    (p) => {
+      setProject(p);
+      openWindow("detail");
+    },
+    [openWindow]
+  );
+
+  const titles = { ...TITLES, detail: project ? `${project.title} Properties` : "Properties" };
 
   return (
-    <MainContainer>
-      <FontStyles />
+    <>
       <GlobalStyles />
-      <Navigation changePage={changePage} currentPage={currentPage} />
-      <ContentWrapper>
-        {renderPage()}
-      </ContentWrapper>
-      <Footer changePage={changePage} />
-    </MainContainer>
+
+      <Desktop ref={hostRef}>
+        <DesktopIcons onOpenWindow={openWindow} />
+
+        {isOpen("about") && <AboutWindow {...chrome("about")} />}
+        {isOpen("experience") && <ExperienceWindow {...chrome("experience")} />}
+        {isOpen("projects") && (
+          <ProjectsWindow {...chrome("projects")} onSelectProject={showProject} />
+        )}
+        {isOpen("detail") && project && (
+          <ProjectDetailWindow
+            {...chrome("detail", { resizable: false })}
+            project={project}
+          />
+        )}
+        {isOpen("skills") && (
+          <SkillsWindow {...chrome("skills", { resizable: false })} />
+        )}
+        {isOpen("contact") && (
+          <ContactWindow {...chrome("contact", { resizable: false })} />
+        )}
+      </Desktop>
+
+      <StartMenu
+        open={startOpen}
+        onOpenWindow={openWindow}
+        onClose={() => setStartOpen(false)}
+      />
+
+      <Taskbar
+        open={open}
+        minimized={minimized}
+        activeId={activeId}
+        titles={titles}
+        icons={ICONS}
+        onTaskClick={taskbarClick}
+        startOpen={startOpen}
+        onStartToggle={() => setStartOpen((v) => !v)}
+      />
+    </>
   );
 }
 

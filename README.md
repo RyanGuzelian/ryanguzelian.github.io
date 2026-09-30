@@ -1,169 +1,105 @@
-# Ryan Guzelian Portfolio
+# Ryan Guzelian — Portfolio
 
-A modern, light-themed portfolio website built with React.js to showcase my projects and skills.
+My personal site, built as a Windows 98 desktop: icons down the left, windows tiled across the
+rest, a taskbar with a Start menu and a live clock. React 18 and styled-components, deployed to
+GitHub Pages at [ryanguzelian.com](https://ryanguzelian.com).
 
-## Table of Contents
-- [Features](#features)
-- [Project Structure](#project-structure)
-- [Getting Started](#getting-started)
-- [Adding New Projects](#adding-new-projects)
-- [Customization](#customization)
-- [Technologies Used](#technologies-used)
-- [Deployment](#deployment)
+The design rationale, tokens, and the rules that keep it from turning into a gimmick live in
+[DESIGN.md](./DESIGN.md). Read that before changing how anything looks.
 
-## Features
+## Getting started
 
-- Modern light theme with clean design
-- Responsive layout that works well on all devices
-- Interactive project showcases with filtering capabilities
-- Typewriter effect for dynamic text presentation
-- Project details view with technical information
-- About page with skills, education, and experience sections
-- Contact form for reaching out
-- Well-structured and documented code
+```bash
+npm install
+npm start      # dev server on http://localhost:3000
+npm run build  # production build into ./build
+```
 
-## Project Structure
+Node 18 is what CI uses.
 
-The project follows a clear component-based structure:
+## Project structure
 
 ```
 src/
-  ├── components/       # Reusable UI components
-  │   ├── Footer.js     # Site-wide footer
-  │   ├── GlobalStyles.js # Global styling variables and resets
-  │   ├── Navigation.js # Navigation bar
-  │   ├── Presentation.js # Typewriter presentation component
-  │   ├── ProjectCard.js # Individual project card
-  │   └── ProjectDetail.js # Detailed project view
-  ├── data/
-  │   └── projects.js   # Project data store
-  ├── images/           # Images used in the project
-  ├── pages/            # Main page components
-  │   ├── About.js      # About page
-  │   ├── Contact.js    # Contact page
-  │   ├── Home.js       # Homepage
-  │   └── Projects.js   # Projects listing page
-  ├── App.js            # Main application component
-  ├── index.js          # Application entry point
-  └── index.css         # Base styles
+  App.js                    the desktop: window registry and wiring
+  hooks/
+    useWindows.js           open/minimize/z-order/geometry, dragging, tiling maths
+  components/
+    Window.js               window chrome — title bar, menu bar, body, status bar
+    DesktopIcons.js         the left-hand icon column
+    Taskbar.js              Start button, window buttons, clock
+    StartMenu.js            the Start menu
+    Icons.js                blocky 32px-grid SVG icon set
+    GlobalStyles.js         tokens and reset
+  styles/
+    win98.js                the bevel system and every widget built on it
+  windows/
+    AboutWindow.js          prose and education
+    ExperienceWindow.js     Explorer "Details" list of roles
+    ProjectsWindow.js       folder of project icons
+    ProjectDetailWindow.js  a project's Properties dialog
+    SkillsWindow.js         tabbed properties dialog
+    ContactWindow.js        contact dialog
+  data/
+    resume.js               experience, education, capabilities, contact, bio
+    projects.js             projects
+  images/                   project screenshots
+public/
+  Ryan Guzelian Resume.pdf  linked from the Resume.pdf desktop icon
 ```
 
-## Getting Started
+## How a window works
 
-To run this project locally:
+Content components never manage position or z-order. `App.js` builds a `chrome(id)` prop bag —
+active state, geometry, and the close/minimize/maximize/drag callbacks — and spreads it into the
+window component, which passes it straight to `<Window>` and adds its own title, icon, and status
+cells:
 
-1. Clone the repository
-   ```
-   git clone https://github.com/ryanguzelian/ryanguzelian.github.io.git
-   cd ryanguzelian.github.io
-   ```
-
-2. Install dependencies
-   ```
-   npm install
-   ```
-
-3. Start the development server
-   ```
-   npm start
-   ```
-
-4. Open [http://localhost:3000](http://localhost:3000) to view it in your browser
-
-## Adding New Projects
-
-Projects are stored in `src/data/projects.js`. To add a new project:
-
-1. Add your project image to the `src/images/` directory
-2. Import the image in `src/data/projects.js`
-3. Add a new project object to the `projects` array with the following structure:
-
-```javascript
-{
-  id: "unique-identifier",              // Unique ID for the project
-  title: "Project Title",               // Project title
-  shortDescription: "Brief overview",   // Short description for card view
-  fullDescription: "Detailed info...",  // Full description for detail view
-  image: ImportedImage,                 // Imported image reference
-  status: "completed" | "in-progress",  // Project status
-  tags: ["tag1", "tag2", "tag3"],       // Technology tags
-  links: [                              // Project links (optional)
-    { type: "github", url: "https://github.com/..." },
-    { type: "live", url: "https://..." }
-  ],
-  technicalDetails: "Implementation...", // Technical details (optional)
-  challenges: "Challenges faced...",     // Challenges & solutions (optional)
-  featured: true | false                 // Whether to highlight in featured section
+```jsx
+export default function AboutWindow(props) {
+  return (
+    <Window {...props} title="About Ryan" icon="user" menu status={["Ready", "Montreal, QC"]}>
+      ...content...
+    </Window>
+  );
 }
 ```
 
-## Customization
+To add a window: create the component in `src/windows/`, then register its title and icon in
+`TITLES` / `ICONS` in `App.js`, render it behind an `isOpen(...)` guard, and add an entry to
+`DesktopIcons.js` and/or `StartMenu.js`.
 
-### Theme Colors
+## Editing content
 
-The main theme colors and styling variables are defined in `src/components/GlobalStyles.js`. You can modify these variables to change the overall look of the site.
+Almost everything is data, not markup.
 
-### Fonts
+- **Experience** — add an entry to the `experience` array in `src/data/resume.js`. Newest first.
+  `figures` is optional.
+- **Projects** — add an entry to `src/data/projects.js`. Import the screenshot at the top of the
+  file, or set `image: null` and the Properties dialog simply omits the screenshot well.
+- **Skills** — edit the `capabilities` array in `resume.js`. `SkillsWindow` looks groups up by
+  label, so renaming a label means updating the tab map in that component.
+- **Bio, education, contact** — the `about`, `education`, and `contact` exports in `resume.js`.
+- **Resume PDF** — replace `public/Ryan Guzelian Resume.pdf`, keeping the filename.
 
-Font families are imported in `App.js` using Google Fonts. You can change them by modifying the import URL and updating the font family variables in `GlobalStyles.js`.
+## Styling rules
 
-### Personal Information
+1. Compose the widgets in `src/styles/win98.js`. Never hand-roll a border — build from the
+   `bevelOut` / `bevelIn` / `bevelThin` mixins.
+2. Every colour comes from a CSS custom property. No raw hex in component files.
+3. The chrome is the pastiche; the content is not. Plain, readable writing inside the windows.
 
-Update your personal information in:
-- `src/pages/About.js` for bio, skills, education, and experience
-- `src/pages/Contact.js` for contact details and social media links
-- `src/pages/Home.js` for the homepage content
+## Mobile
 
-## Technologies Used
-
-- React.js
-- Styled Components
-- React Bootstrap
-- Font Awesome (for icons)
-- Typewriter Effect
+Below 820px the desktop metaphor is dropped rather than faked: windows stop being positioned and
+stack as full-width panels, dragging is disabled, menu bars are hidden, and title bar buttons grow
+from the authentic 16px to a usable tap target. Below 420px the taskbar's window buttons drop and
+Start becomes the way around.
 
 ## Deployment
 
-This project is set up for deployment to GitHub Pages:
+Pushing to `main` triggers `.github/workflows/deploy.yml`, which runs `npm ci`, `npm run build`,
+and publishes `./build` to GitHub Pages. `CNAME` holds the custom domain.
 
-1. Ensure the `homepage` field in `package.json` is correctly set to your GitHub Pages URL
-2. Run the deployment script:
-   ```
-   npm run deploy
-   ```
-
-For other deployment options, see the [Create React App deployment documentation](https://facebook.github.io/create-react-app/docs/deployment).
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Because the workflow uses `npm ci`, `package-lock.json` must stay in sync with `package.json` — run
+`npm install` after changing dependencies and commit the lockfile.
